@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : BitUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.01.27 - yc.jeon
+// Last Update      : 2024.02.17 - yc.jeon
 // ======================================================================================================
 
 namespace CSUtil
@@ -24,7 +24,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 32)
             {
-                throw new ArgumentOutOfRangeException("nLoc");
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             return isSet ? data | (0x01 << loc) : data & ~(0x01 << loc);
@@ -43,7 +43,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 8)
             {
-                throw new ArgumentOutOfRangeException("nLoc");
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             return isSet ? (byte)(data | (0x01 << loc)) : (byte)(data & ~(0x01 << loc));
@@ -63,7 +63,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= bitArray.Length)
             {
-                throw new ArgumentOutOfRangeException("nLoc");
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
             bitArray[loc] = isSet;
             byte[] byNew = new byte[datas.Length];
@@ -84,7 +84,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= bitArray.Length)
             {
-                throw new ArgumentOutOfRangeException("nLoc");
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
             return bitArray.Get(loc);
         }
@@ -101,7 +101,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 32)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             int nValue = 0x1 << loc;
@@ -120,7 +120,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 32)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             uint unValue = (uint)(0x1 << loc);
@@ -139,7 +139,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 8)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             byte byValue = (byte)(0x1 << loc);
@@ -158,7 +158,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 16)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             short shValue = (short)(0x1 << loc);
@@ -177,7 +177,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 16)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             ushort ushValue = (ushort)(0x1 << loc);
@@ -196,7 +196,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 64)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             long lValue = (long)(0x1 << loc);
@@ -215,7 +215,7 @@ namespace CSUtil
             if (loc < 0 ||
                 loc >= 64)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(loc));
             }
 
             ulong ulValue = (ulong)(0x1 << loc);

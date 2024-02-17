@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : ByteUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.01.27 - yc.jeon
+// Last Update      : 2024.02.17 - yc.jeon
 // ======================================================================================================
 
 namespace CSUtil
@@ -21,13 +21,12 @@ namespace CSUtil
         {
             if (bytes.Length % 2 != 0)
             {
-                throw new Exception("Byte Swap Func byte Array Length Not Matched");
+                throw new ArgumentException("Byte Swap Func byte Array Length Not Matched", nameof(bytes));
             }
 
-            byte tmp = 0;
             for (int i = 0; i < bytes.Length; i += 2)
             {
-                tmp = bytes[i];
+                byte tmp = bytes[i];
                 bytes[i] = bytes[i + 1];
                 bytes[i + 1] = tmp;
             }
@@ -55,7 +54,7 @@ namespace CSUtil
 
             if (start > end)
             {
-                throw new ArgumentException("start is over than end.");
+                throw new ArgumentException("start is over than end.", nameof(start));
             }
 
             int length = end - start + 1;

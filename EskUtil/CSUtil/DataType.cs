@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : DataType.cs
 // Project          : CSUtil
-// Last Update      : 2024.01.27 - yc.jeon
+// Last Update      : 2024.02.17 - yc.jeon
 // ======================================================================================================
 
 using System.Diagnostics;
@@ -477,9 +477,11 @@ namespace CSUtil
                         return string.IsNullOrEmpty(value) ? DateTime.MinValue : DateTime.Parse(value);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+#if DEBUG
+                Debug.WriteLine($"StringToObject: {ex}");
+#endif
             }
 
             return null;
@@ -653,141 +655,40 @@ namespace CSUtil
             {
                 case Types.BYTE:
                 case Types.BIT:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new byte[size];
-                        }
-                        else
-                        {
-                            objValue = (byte)0;
-                        }
-                    }
+                    objValue = size > 1 ? new byte[size] : (byte)0;
                     break;
                 case Types.BOOL:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new bool[size];
-                        }
-                        else
-                        {
-                            objValue = false;
-                        }
-                    }
+                    objValue = size > 1 ? new bool[size] : false;
                     break;
                 case Types.STRING:
-                    {
-                        objValue = string.Empty;
-                    }
+                    objValue = string.Empty;
                     break;
                 case Types.SHORT:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new short[size];
-                        }
-                        else
-                        {
-                            objValue = (short)0;
-                        }
-                    }
+                    objValue = size > 1 ? new short[size] : (short)0;
                     break;
                 case Types.USHORT:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new ushort[size];
-                        }
-                        else
-                        {
-                            objValue = ushort.MinValue;
-                        }
-                    }
+                    objValue = size > 1 ? new ushort[size] : (ushort)0;
                     break;
                 case Types.INT:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new int[size];
-                        }
-                        else
-                        {
-                            objValue = 0;
-                        }
-                    }
+                    objValue = size > 1 ? new int[size] : 0;
                     break;
                 case Types.UINT:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new uint[size];
-                        }
-                        else
-                        {
-                            objValue = (uint)0;
-                        }
-                    }
+                    objValue = size > 1 ? new uint[size] : (uint)0;
                     break;
                 case Types.LONG:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new long[size];
-                        }
-                        else
-                        {
-                            objValue = 0L;
-                        }
-                    }
+                    objValue = size > 1 ? new long[size] : 0L;
                     break;
                 case Types.ULONG:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new ulong[size];
-                        }
-                        else
-                        {
-                            objValue = ulong.MinValue;
-                        }
-                    }
+                    objValue = size > 1 ? new ulong[size] : 0UL;
                     break;
                 case Types.FLOAT:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new float[size];
-                        }
-                        else
-                        {
-                            objValue = 0.0f;
-                        }
-                    }
+                    objValue = size > 1 ? new float[size] : 0.0F;
                     break;
                 case Types.DOUBLE:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new double[size];
-                        }
-                        else
-                        {
-                            objValue = 0.0;
-                        }
-                    }
+                    objValue = size > 1 ? new double[size] : 0.0;
                     break;
                 case Types.DATETIME:
-                    {
-                        if (size > 1)
-                        {
-                            objValue = new DateTime[size];
-                        }
-                        else
-                        {
-                            objValue = DateTime.Now;
-                        }
-                    }
+                    objValue = size > 1 ? new DateTime[size] : DateTime.Now;
                     break;
             }
 
@@ -861,7 +762,7 @@ namespace CSUtil
             catch (Exception ex)
             {
 #if DEBUG
-                Debug.WriteLine(ex.ToString());
+                Debug.WriteLine($"DataToObject: {ex}");
 #endif
             }
 
@@ -955,10 +856,13 @@ namespace CSUtil
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 resultData = null;
                 result = false;
+#if DEBUG
+                Debug.WriteLine($"DataMinMaxCheck: {ex}");
+#endif
             }
 
             return result;
@@ -1088,10 +992,13 @@ namespace CSUtil
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 resultData = null;
                 result = false;
+#if DEBUG
+                Debug.WriteLine($"DataMinMaxCheck: {ex}");
+#endif
             }
 
             return result;

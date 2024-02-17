@@ -22,7 +22,7 @@ namespace CSUtil
         /// <returns>한 줄로 만들어진 문자열</returns>
         public static string OneLineStringWidthChar<T>(this T[] values, char token)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder(128);
 
             for (int i = 0; i < values.Length; ++i)
             {

@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : CalcUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.01.27 - yc.jeon
+// Last Update      : 2024.09.16 - yc.jeon
 // ======================================================================================================
 
 namespace CSUtil
@@ -43,6 +43,200 @@ namespace CSUtil
             double posRange = target + diff;
 
             return data >= negRange && data <= posRange;
+        }
+
+        /// <summary>
+        /// <paramref name="value"/>가 짝수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">짝수인지 확인할 값</param>
+        /// <returns>
+        /// true: 짝수 <br/>
+        /// false: 홀수
+        /// </returns>
+        public static bool IsEven(byte value)
+        {
+            return (value & 1) == 0;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 짝수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">짝수인지 확인할 값</param>
+        /// <returns>
+        /// true: 짝수 <br/>
+        /// false: 홀수
+        /// </returns>
+        public static bool IsEven(sbyte value)
+        {
+            return (value & 1) == 0;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 짝수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">짝수인지 확인할 값</param>
+        /// <returns>
+        /// true: 짝수 <br/>
+        /// false: 홀수
+        /// </returns>
+        public static bool IsEven(short value)
+        {
+            return (value & 1) == 0;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 짝수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">짝수인지 확인할 값</param>
+        /// <returns>
+        /// true: 짝수 <br/>
+        /// false: 홀수
+        /// </returns>
+        public static bool IsEven(ushort value)
+        {
+            return (value & 1) == 0;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 짝수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">짝수인지 확인할 값</param>
+        /// <returns>
+        /// true: 짝수 <br/>
+        /// false: 홀수
+        /// </returns>
+        public static bool IsEven(int value)
+        {
+            return (value & 1) == 0;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 짝수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">짝수인지 확인할 값</param>
+        /// <returns>
+        /// true: 짝수 <br/>
+        /// false: 홀수
+        /// </returns>
+        public static bool IsEven(uint value)
+        {
+            return (value & 1) == 0;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 짝수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">짝수인지 확인할 값</param>
+        /// <returns>
+        /// true: 짝수 <br/>
+        /// false: 홀수
+        /// </returns>
+        public static bool IsEven(long value)
+        {
+            return (value & 1) == 0;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 짝수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">짝수인지 확인할 값</param>
+        /// <returns>
+        /// true: 짝수 <br/>
+        /// false: 홀수
+        /// </returns>
+        public static bool IsEven(ulong value)
+        {
+            return (value & 1) == 0;
+        }
+
+        /// <summary>
+        /// <paramref name="value"/>가 홀수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">홀수인지 확인할 값</param>
+        /// <returns>
+        /// true: 홀수 <br/>
+        /// false: 짝수
+        /// </returns>
+        public static bool IsOdd(byte value)
+        {
+            return (value & 1) == 1;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 홀수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">홀수인지 확인할 값</param>
+        /// <returns>
+        /// true: 홀수 <br/>
+        /// false: 짝수
+        /// </returns>
+        public static bool IsOdd(sbyte value)
+        {
+            return (value & 1) == 1;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 홀수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">홀수인지 확인할 값</param>
+        /// <returns>
+        /// true: 홀수 <br/>
+        /// false: 짝수
+        /// </returns>
+        public static bool IsOdd(short value)
+        {
+            return (value & 1) == 1;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 홀수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">홀수인지 확인할 값</param>
+        /// <returns>
+        /// true: 홀수 <br/>
+        /// false: 짝수
+        /// </returns>
+        public static bool IsOdd(ushort value)
+        {
+            return (value & 1) == 1;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 홀수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">홀수인지 확인할 값</param>
+        /// <returns>
+        /// true: 홀수 <br/>
+        /// false: 짝수
+        /// </returns>
+        public static bool IsOdd(int value)
+        {
+            return (value & 1) == 1;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 홀수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">홀수인지 확인할 값</param>
+        /// <returns>
+        /// true: 홀수 <br/>
+        /// false: 짝수
+        /// </returns>
+        public static bool IsOdd(uint value)
+        {
+            return (value & 1) == 1;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 홀수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">홀수인지 확인할 값</param>
+        /// <returns>
+        /// true: 홀수 <br/>
+        /// false: 짝수
+        /// </returns>
+        public static bool IsOdd(long value)
+        {
+            return (value & 1) == 1;
+        }
+        /// <summary>
+        /// <paramref name="value"/>가 홀수인지 확인하는 함수
+        /// </summary>
+        /// <param name="value">홀수인지 확인할 값</param>
+        /// <returns>
+        /// true: 홀수 <br/>
+        /// false: 짝수
+        /// </returns>
+        public static bool IsOdd(ulong value)
+        {
+            return (value & 1) == 1;
         }
     }
 }

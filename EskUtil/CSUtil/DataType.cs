@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : DataType.cs
 // Project          : CSUtil
-// Last Update      : 2024.02.17 - yc.jeon
+// Last Update      : 2024.09.16 - yc.jeon
 // ======================================================================================================
 
 using System.Diagnostics;
@@ -534,86 +534,86 @@ namespace CSUtil
                         {
                             result = value.ToString()!.TrimEnd('\0');
                             //string[] datas = (string[])value;
-                            //result = UtilFunc.OneLineStringWidthChar(datas, token);
+                            //result = UtilFunc.OneLineString(datas, token);
                         }
                         break;
                     case Types.BOOL:
                         {
                             bool[] datas = (bool[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.BIT:
                     case Types.BYTE:
                         {
                             byte[] datas = (byte[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.SBYTE:
                         {
                             sbyte[] datas = (sbyte[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.CHAR:
                         {
                             char[] datas = (char[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.SHORT:
                         {
                             short[] datas = (short[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.USHORT:
                         {
                             ushort[] datas = (ushort[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.INT:
                         {
                             int[] datas = (int[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.UINT:
                         {
                             uint[] datas = (uint[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.LONG:
                         {
                             long[] datas = (long[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.ULONG:
                         {
                             ulong[] datas = (ulong[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.FLOAT:
                         {
                             float[] datas = (float[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.DOUBLE:
                         {
                             double[] datas = (double[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                     case Types.DATETIME:
                         {
                             DateTime[] datas = (DateTime[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = ExtensionUtil.OneLineString(datas, token);
                         }
                         break;
                 }

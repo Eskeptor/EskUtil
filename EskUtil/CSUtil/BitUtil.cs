@@ -1,8 +1,10 @@
 ﻿// ======================================================================================================
 // File Name        : BitUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.02.17 - yc.jeon
+// Last Update      : 2024.09.16 - yc.jeon
 // ======================================================================================================
+
+using System.Collections;
 
 namespace CSUtil
 {
@@ -18,27 +20,8 @@ namespace CSUtil
         /// <param name="loc">위치</param>
         /// <param name="isSet">비트 설정값</param>
         /// <returns>설정한 후의 값</returns>
-        /// <exception cref="ArgumentOutOfRangeException">위치 값이 int 범위를 벗어났을 때</exception>
-        public static int SetBit(int data, int loc, bool isSet)
-        {
-            if (loc < 0 ||
-                loc >= 32)
-            {
-                throw new ArgumentOutOfRangeException(nameof(loc));
-            }
-
-            return isSet ? data | (0x01 << loc) : data & ~(0x01 << loc);
-        }
-
-        /// <summary>
-        /// 해당 데이터의 특정 위치의 비트값을 설정하는 함수
-        /// </summary>
-        /// <param name="data">데이터</param>
-        /// <param name="loc">위치</param>
-        /// <param name="isSet">비트 설정값</param>
-        /// <returns>설정한 후의 값</returns>
         /// <exception cref="ArgumentOutOfRangeException">위치 값이 데이터의 범위를 벗어났을 때</exception>
-        public static byte SetBit(byte data, int loc, bool isSet)
+        public static byte SetBit(this byte data, int loc, bool isSet)
         {
             if (loc < 0 ||
                 loc >= 8)
@@ -57,9 +40,9 @@ namespace CSUtil
         /// <param name="isSet">비트 설정값</param>
         /// <returns>설정한 후의 값</returns>
         /// <exception cref="ArgumentOutOfRangeException">위치 값이 데이터의 범위를 벗어났을 때</exception>
-        public static byte[] SetBit(byte[] datas, int loc, bool isSet)
+        public static byte[] SetBit(this byte[] datas, int loc, bool isSet)
         {
-            System.Collections.BitArray bitArray = new System.Collections.BitArray(datas);
+            BitArray bitArray = new BitArray(datas);
             if (loc < 0 ||
                 loc >= bitArray.Length)
             {
@@ -72,6 +55,82 @@ namespace CSUtil
         }
 
         /// <summary>
+        /// 해당 데이터의 특정 위치의 비트값을 설정하는 함수
+        /// </summary>
+        /// <param name="data">데이터</param>
+        /// <param name="loc">위치</param>
+        /// <param name="isSet">비트 설정값</param>
+        /// <returns>설정한 후의 값</returns>
+        /// <exception cref="ArgumentOutOfRangeException">위치 값이 short 범위를 벗어났을 때</exception>
+        public static short SetBit(this short data, int loc, bool isSet)
+        {
+            if (loc < 0 ||
+                loc >= 16)
+            {
+                throw new ArgumentOutOfRangeException(nameof(loc));
+            }
+
+            return isSet ? (short)(data | (short)(0x01 << loc)) : (short)(data & ~(0x01 << loc));
+        }
+
+        /// <summary>
+        /// 해당 데이터의 특정 위치의 비트값을 설정하는 함수
+        /// </summary>
+        /// <param name="data">데이터</param>
+        /// <param name="loc">위치</param>
+        /// <param name="isSet">비트 설정값</param>
+        /// <returns>설정한 후의 값</returns>
+        /// <exception cref="ArgumentOutOfRangeException">위치 값이 ushort 범위를 벗어났을 때</exception>
+        public static ushort SetBit(this ushort data, int loc, bool isSet)
+        {
+            if (loc < 0 ||
+                loc >= 16)
+            {
+                throw new ArgumentOutOfRangeException(nameof(loc));
+            }
+
+            return isSet ? (ushort)(data | (ushort)(0x01 << loc)) : (ushort)(data & ~(0x01 << loc));
+        }
+
+        /// <summary>
+        /// 해당 데이터의 특정 위치의 비트값을 설정하는 함수
+        /// </summary>
+        /// <param name="data">데이터</param>
+        /// <param name="loc">위치</param>
+        /// <param name="isSet">비트 설정값</param>
+        /// <returns>설정한 후의 값</returns>
+        /// <exception cref="ArgumentOutOfRangeException">위치 값이 int 범위를 벗어났을 때</exception>
+        public static int SetBit(this int data, int loc, bool isSet)
+        {
+            if (loc < 0 ||
+                loc >= 32)
+            {
+                throw new ArgumentOutOfRangeException(nameof(loc));
+            }
+
+            return isSet ? data | (0x01 << loc) : data & ~(0x01 << loc);
+        }
+
+        /// <summary>
+        /// 해당 데이터의 특정 위치의 비트값을 설정하는 함수
+        /// </summary>
+        /// <param name="data">데이터</param>
+        /// <param name="loc">위치</param>
+        /// <param name="isSet">비트 설정값</param>
+        /// <returns>설정한 후의 값</returns>
+        /// <exception cref="ArgumentOutOfRangeException">위치 값이 uint 범위를 벗어났을 때</exception>
+        public static uint SetBit(this uint data, int loc, bool isSet)
+        {
+            if (loc < 0 ||
+                loc >= 32)
+            {
+                throw new ArgumentOutOfRangeException(nameof(loc));
+            }
+
+            return isSet ? (uint)(data | (uint)(0x01 << loc)) : (uint)(data & ~(0x01 << loc));
+        }
+
+        /// <summary>
         /// 데이터의 특정 비트값이 설정되어있는지 확인하는 함수
         /// </summary>
         /// <param name="datas">데이터</param>
@@ -80,7 +139,7 @@ namespace CSUtil
         /// <exception cref="ArgumentOutOfRangeException">위치 값이 데이터의 범위를 벗어났을 때</exception>
         public static bool CheckBit(byte[] datas, int loc)
         {
-            System.Collections.BitArray bitArray = new System.Collections.BitArray(datas);
+            BitArray bitArray = new BitArray(datas);
             if (loc < 0 ||
                 loc >= bitArray.Length)
             {

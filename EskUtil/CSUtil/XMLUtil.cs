@@ -1,16 +1,18 @@
 ﻿// ======================================================================================================
 // File Name        : XMLUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.01.27 - yc.jeon
+// Last Update      : 2024.09.16 - yc.jeon
 // ======================================================================================================
 
 using System.Diagnostics;
+using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace CSUtil
 {
     /// <summary>
-    /// XML 관련 유틸리티
+    /// XML 관련 유틸
     /// </summary>
     public static class XMLUtil
     {
@@ -21,32 +23,60 @@ namespace CSUtil
         /// <param name="fileName">XML파일명</param>
         /// <param name="type">원본 object 타입</param>
         /// <param name="data">XML화 할 원본 데이터</param>
-        public static void SerializeXML(string dirPath, string fileName, Type type, object data)
+        /// <param name="extraTypes">XML Serialize에서 사용할 추가적 Types (기본값: null)</param>
+        /// <returns>
+        /// true: 성공 <br/>
+        /// false: 실패
+        /// </returns>
+        public static bool SerializeXML(string dirPath, string fileName, Type type, object data, Type[]? extraTypes = null)
         {
+            if (string.IsNullOrEmpty(dirPath))
+            {
+                return false;
+            }
+
             if (dirPath.Length == 0)
             {
                 dirPath = $".{Path.DirectorySeparatorChar}";
             }
-
             if (dirPath.LastIndexOf(Path.DirectorySeparatorChar) != dirPath.Length - 1)
             {
                 dirPath += Path.DirectorySeparatorChar;
             }
 
-            DirectoryInfo info = new DirectoryInfo(dirPath);
-
-            if (!info.Exists)
+            bool result = true;
+            try
             {
-                info.Create();
-            }
+                DirectoryInfo info = new DirectoryInfo(dirPath);
 
-            using (Stream stream = new FileStream(Path.Combine(dirPath, fileName), FileMode.Create, FileAccess.Write))
-            {
-                XmlSerializer xmlSerializer = new XmlSerializer(type);
+                if (!info.Exists)
+                {
+                    info.Create();
+                }
+
+                XmlSerializer xmlSerializer = extraTypes != null ? new XmlSerializer(type, extraTypes) : new XmlSerializer(type);
+                XmlWriterSettings settings = new XmlWriterSettings()
+                {
+                    Indent = true,
+                    Encoding = Encoding.UTF8,
+                    OmitXmlDeclaration = false,
+                };
                 XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
                 ns.Add("", "");
-                xmlSerializer.Serialize(stream, data, ns);
+
+                using (StreamWriter stream = new StreamWriter(Path.Combine(dirPath, fileName)))
+                using (XmlWriter writer = XmlWriter.Create(stream, settings))
+                {
+                    xmlSerializer.Serialize(stream, data, ns);
+                }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                result = false;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -55,15 +85,40 @@ namespace CSUtil
         /// <param name="filePath">XML 파일 경로(전체 Full 경로)</param>
         /// <param name="type">원본 object 타입</param>
         /// <param name="data">XML화 할 원본 데이터</param>
-        public static void SerializeXML(string filePath, Type type, object data)
+        /// <param name="extraTypes">XML Serialize에서 사용할 추가적 Types (기본값: null)</param>
+        /// <returns>
+        /// true: 성공 <br/>
+        /// false: 실패
+        /// </returns>
+        public static bool SerializeXML(string filePath, Type type, object data, Type[]? extraTypes = null)
         {
-            using (Stream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            bool result = true;
+
+            try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(type);
+                XmlSerializer xmlSerializer = extraTypes != null ? new XmlSerializer(type, extraTypes) : new XmlSerializer(type);
+                XmlWriterSettings settings = new XmlWriterSettings()
+                {
+                    Indent = true,
+                    Encoding = new UTF8Encoding(false),
+                    OmitXmlDeclaration = false,
+                };
                 XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
                 ns.Add("", "");
-                xmlSerializer.Serialize(stream, data, ns);
+
+                using (StreamWriter stream = new StreamWriter(filePath))
+                using (XmlWriter writer = XmlWriter.Create(stream, settings))
+                {
+                    xmlSerializer.Serialize(stream, data, ns);
+                }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                result = false;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -71,8 +126,9 @@ namespace CSUtil
         /// </summary>
         /// <param name="filePath">XML파일명(전체 경로)</param>
         /// <param name="type">데이터 타입</param>
-        /// <returns></returns>
-        public static object? DeserializeXML(string filePath, Type type)
+        /// <param name="extraTypes">XML Deserialize에서 사용할 추가적 Types (기본값: null)</param>
+        /// <returns>불러온 XML 데이터</returns>
+        public static object? DeserializeXML(string filePath, Type type, Type[]? extraTypes = null)
         {
             FileInfo info = new FileInfo(filePath);
             object? data = null;
@@ -84,16 +140,21 @@ namespace CSUtil
 
             try
             {
-                using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                XmlSerializer xmlSerializer = extraTypes != null ? new XmlSerializer(type, extraTypes) : new XmlSerializer(type);
+                XmlReaderSettings settings = new XmlReaderSettings()
                 {
-                    XmlSerializer xmlSerializer = new XmlSerializer(type);
-                    data = xmlSerializer.Deserialize(stream);
+                    DtdProcessing = DtdProcessing.Prohibit,
+                };
+
+                using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                using (XmlReader xmlReader = XmlReader.Create(stream, settings))
+                {
+                    data = xmlSerializer.Deserialize(xmlReader);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
-                //LogManager.Instance.WriteLog("Exception", $"DeserializeXML Failed : {ex}");
             }
 
             return data;

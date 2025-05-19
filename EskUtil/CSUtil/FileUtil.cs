@@ -1,17 +1,17 @@
 ﻿// ======================================================================================================
 // File Name        : FileUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.01.27 - yc.jeon
+// Last Update      : 2025.05.19 - yc.jeon
 // ======================================================================================================
 
+using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace CSUtil
 {
-    /// <summary>
-    /// 파일 관련 유틸리티
-    /// </summary>
     public static class FileUtil
     {
         /// <summary>
@@ -60,7 +60,7 @@ namespace CSUtil
         /// true : 성공 <br/>
         /// false : 실패
         /// </returns>
-        public static bool FileRename(string path, string orgName, string chgName, FileTypes type)
+        public static bool RenameFile(string path, string orgName, string chgName, FileTypes type)
         {
             bool result = false;
 
@@ -85,10 +85,7 @@ namespace CSUtil
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-#if DEBUG
-                Debug.WriteLine(ex.ToString());
-#endif
+                Debug.WriteLine($"[Common.Util.FileUtil:FileRename] Exception: {ex}");
             }
 
             return result;
@@ -105,24 +102,26 @@ namespace CSUtil
         /// true : 성공 <br/>
         /// false : 실패
         /// </returns>
-        public static bool ReadFile(string filePath, out string readData, ReadTypes type = ReadTypes.ReadToEnd, Encoding? encoding = null)
+        public static bool ReadFile(string filePath, out string readData, ReadTypes type = ReadTypes.ReadToEnd, Encoding encoding = null)
         {
             readData = string.Empty;
 
-            if (string.IsNullOrEmpty(filePath))
+            if (string.IsNullOrWhiteSpace(filePath))
             {
+                Debug.WriteLine($"[Common.Util.FileUtil:ReadFile] Failed: {nameof(filePath)} is null or empty.");
                 return false;
             }
-
-            encoding ??= Encoding.UTF8;
-
             if (!File.Exists(filePath))
             {
+                Debug.WriteLine($"[Common.Util.FileUtil:ReadFile] Failed: {nameof(filePath)}({filePath}) is not exist.");
                 return false;
+            }
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
             }
 
             bool result = false;
-
             try
             {
                 switch (type)
@@ -144,11 +143,11 @@ namespace CSUtil
                         break;
                     case ReadTypes.ReadLines:
                         {
-                            StringBuilder stringBuilder = new StringBuilder();
+                            StringBuilder stringBuilder = new StringBuilder(128);
                             using (StreamReader streamReader = new StreamReader(filePath, encoding))
                             {
                                 string line = string.Empty;
-                                while ((line = streamReader.ReadLine()!) != null)
+                                while ((line = streamReader.ReadLine()) != null)
                                 {
                                     stringBuilder.Append(line);
                                 }
@@ -157,14 +156,13 @@ namespace CSUtil
                             result = true;
                         }
                         break;
+                    default:
+                        throw new ArgumentException("Invalid ReadTypes", nameof(type));
                 }
             }
             catch (Exception ex)
             {
-                readData = ex.ToString();
-#if DEBUG
-                Debug.WriteLine(readData);
-#endif
+                Debug.WriteLine($"[Common.Util.FileUtil:ReadFile] Exception: {ex}");
             }
 
             return result;
@@ -181,17 +179,19 @@ namespace CSUtil
         /// true : 성공 <br/>
         /// false : 실패
         /// </returns>
-        public static bool WriteFile(string filePath, string writeData, WriteTypes type = WriteTypes.Write, Encoding? encoding = null)
+        public static bool WriteFile(string filePath, string writeData, WriteTypes type = WriteTypes.Write, Encoding encoding = null)
         {
-            if (string.IsNullOrEmpty(filePath))
+            if (string.IsNullOrWhiteSpace(filePath))
             {
+                Debug.WriteLine($"[Common.Util.FileUtil:WriteFile] Failed: {nameof(filePath)} is null or empty.");
                 return false;
             }
-
-            encoding ??= Encoding.UTF8;
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
 
             bool result = false;
-
             try
             {
                 switch (type)
@@ -211,13 +211,13 @@ namespace CSUtil
                             result = true;
                         }
                         break;
+                    default:
+                        throw new ArgumentException("Invalid WriteTypes", nameof(type));
                 }
             }
             catch (Exception ex)
             {
-#if DEBUG
-                Debug.WriteLine(ex.ToString());
-#endif
+                Debug.WriteLine($"[Common.Util.FileUtil:WriteFile] Exception: {ex}");
             }
 
             return result;
@@ -233,13 +233,14 @@ namespace CSUtil
         /// </returns>
         public static bool IsFileOpen(string filePath)
         {
-            if (string.IsNullOrEmpty(filePath))
+            if (string.IsNullOrWhiteSpace(filePath))
             {
+                Debug.WriteLine($"[Common.Util.FileUtil:IsFileOpen] Failed: {nameof(filePath)} is null or empty.");
                 return false;
             }
-
             if (!File.Exists(filePath))
             {
+                Debug.WriteLine($"[Common.Util.FileUtil:IsFileOpen] Failed: {nameof(filePath)}({filePath}) is not exist.");
                 return false;
             }
 
@@ -247,7 +248,7 @@ namespace CSUtil
             {
                 using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
                 {
-                    stream.Close();
+
                 }
             }
             catch (IOException)
@@ -274,13 +275,142 @@ namespace CSUtil
                     return Directory.GetCurrentDirectory();
                 case EnvironmentTypes.UNIVERSAL_2:
                     return System.Environment.CurrentDirectory;
-                //case EnvironmentTypes.WINFORM:
-                //    return System.Windows.Forms.Application.StartupPath;
+#if WINFORM
+                case EnvironmentTypes.WINFORM:
+                    return System.Windows.Forms.Application.StartupPath;
+#endif
                 case EnvironmentTypes.WPF:
                     return AppDomain.CurrentDomain.BaseDirectory;
+                default:
+                    return Directory.GetCurrentDirectory();
+            }
+        }
+
+        /// <summary>
+        /// 파일의 Version 정보를 받아오는 함수 <br/>
+        /// </summary>
+        /// <param name="filePath">파일의 경로 (전체 경로)</param>
+        /// <param name="isIncludeBuildDate">파일 빌드 날짜 포함 유무</param>
+        /// <returns>파일버전 또는 파일버전 build yyyy-MM-dd HH:mm:ss.fff</returns>
+        public static string GetFileVersion(string filePath, bool isIncludeBuildDate = true)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                Debug.WriteLine($"[Common.Util.FileUtil:GetFileVersion] Failed: {nameof(filePath)} is null or empty.");
+                return string.Empty;
+            }
+            if (!File.Exists(filePath))
+            {
+                Debug.WriteLine($"[Common.Util.FileUtil:GetFileVersion] Failed: {nameof(filePath)}({filePath}) is not exist.");
+                return string.Empty;
             }
 
-            return string.Empty;
+            FileInfo fileInfo = new FileInfo(filePath);
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(filePath);
+
+            return isIncludeBuildDate ?
+                $"{fileVersionInfo.FileVersion} build {fileInfo.LastWriteTime:yyyy-MM-dd HH:mm:ss.fff}" :
+                fileVersionInfo.FileVersion;
+        }
+
+        /// <summary>
+        /// 현재 실행 파일의 Version 정보를 받아오는 함수 <br/>
+        /// </summary>
+        /// <param name="isIncludeBuildDate">파일 빌드 날짜 포함 유무</param>
+        /// <returns>파일버전 또는 파일버전 build yyyy-MM-dd HH:mm:ss.fff</returns>
+        public static string GetFileVersion(bool isIncludeBuildDate = true)
+        {
+            Assembly assembly = Assembly.GetEntryAssembly();
+            string exePath = assembly.Location;
+            Version version = assembly.GetName().Version;
+
+            if (isIncludeBuildDate)
+            {
+                DateTime lastWriteTime = File.GetLastWriteTime(exePath);
+                string env = IntPtr.Size == 8 ? "x64" : "x86";
+                return $"{version} build ({env}) {lastWriteTime:yyyy-MM-dd HH:mm:ss.fff}";
+            }
+            else
+            {
+                return version.ToString();
+            }
+        }
+
+        /// <summary>
+        /// 파일의 내용을 변경하는 함수
+        /// </summary>
+        /// <param name="filePath">변경할 파일의 전체경로</param>
+        /// <param name="prevContext">변경할 내용</param>
+        /// <param name="newContext">변경된 내용</param>
+        /// <returns>
+        /// true: 변경 성공 <br/>
+        /// false: 변경 실패
+        /// </returns>
+        public static bool ChangeContext(string filePath, string prevContext, string newContext)
+        {
+            if (string.IsNullOrEmpty(prevContext))
+            {
+                Debug.WriteLine($"[Common.Util.FileUtil:ChangeContext] Failed: {nameof(prevContext)} is null or empty.");
+                return false;
+            }
+            if (!File.Exists(filePath))
+            {
+                Debug.WriteLine($"[Common.Util.FileUtil:ChangeContext] Failed: {nameof(filePath)}({filePath}) is not exist.");
+                return false;
+            }
+
+            string tempFile = $"{filePath}_tempFile";
+            using (StreamReader sr = new StreamReader(filePath))
+            using (StreamWriter sw = new StreamWriter(tempFile, false))
+            {
+                string line = sr.ReadLine();
+                while (line != null)
+                {
+                    line = line.Replace(prevContext, newContext);
+                    sw.WriteLine(line);
+
+                    line = sr.ReadLine();
+                }
+            }
+
+            bool isComplete;
+            try
+            {
+                File.Delete(filePath);
+                File.Move(tempFile, filePath);
+                isComplete = File.Exists(filePath);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Common.Util.FileUtil:ChangeContext] Exception: {ex}");
+                isComplete = false;
+            }
+
+            return isComplete;
+        }
+
+        /// <summary>
+        /// 파일을 복사하는 함수
+        /// </summary>
+        /// <param name="sourceFilePath">복사 대상 파일의 전체 경로</param>
+        /// <param name="copiedFilePath">복사 위치 전체 경로</param>
+        /// <param name="overwrite">파일이 존재하는 경우 덮어쓸지 유무</param>
+        /// <returns>
+        /// true: 복사 성공 <br/>
+        /// false: 복사 실패(IOException, UnauthorizedAccessException, Exception 발생)
+        /// </returns>
+        public static bool CopyFile(string sourceFilePath, string copiedFilePath, bool overwrite)
+        {
+            try
+            {
+                File.Copy(sourceFilePath, copiedFilePath, overwrite: overwrite);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Common.Util.FileUtil:CopyFile] Exception: {ex}");
+                return false;
+            }
+            return true;
         }
     }
 }

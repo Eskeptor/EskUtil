@@ -1,10 +1,13 @@
 ﻿// ======================================================================================================
 // File Name        : MemoryUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.01.27 - yc.jeon
+// Last Update      : 2025.05.19 - yc.jeon
 // ======================================================================================================
 
+using System;
 using System.Text;
+using System.Collections.Generic;
+using System.IO;
 
 namespace CSUtil
 {
@@ -38,7 +41,7 @@ namespace CSUtil
             /// <summary>
             /// Log Manager
             /// </summary>
-            private Log4netUtil.LogManager _logManager = null!;
+            private Log4netUtil.LogManager _logManager;
 
             /// <summary>
             /// 생성자
@@ -94,7 +97,7 @@ namespace CSUtil
             /// </summary>
             /// <param name="blockIdx">가져올 메모리 블럭의 인덱스</param>
             /// <returns>메모리 블럭 버퍼</returns>
-            public byte[]? GetBufferData(int blockIdx)
+            public byte[] GetBufferData(int blockIdx)
             {
                 if (blockIdx < 0 ||
                     blockIdx >= Buffer.Count)
@@ -354,7 +357,7 @@ namespace CSUtil
             /// <param name="position">데이터의 위치</param>
             /// <param name="length">바이트 데이터의 길이</param>
             /// <returns>true: 성공, false: 실패</returns>
-            public bool Get(out byte[]? datas, int position, int length)
+            public bool Get(out byte[] datas, int position, int length)
             {
                 if (position + length >= MemorySize)
                 {
@@ -422,12 +425,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToBoolean(bytes!, 0);
+                        data = BitConverter.ToBoolean(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -455,10 +458,10 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
-                    data = bytes![0];
+                    data = bytes[0];
                 }
 
                 return result;
@@ -480,12 +483,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToInt16(bytes!, 0);
+                        data = BitConverter.ToInt16(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -513,12 +516,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToUInt16(bytes!, 0);
+                        data = BitConverter.ToUInt16(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -546,12 +549,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToInt32(bytes!, 0);
+                        data = BitConverter.ToInt32(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -579,12 +582,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToUInt32(bytes!, 0);
+                        data = BitConverter.ToUInt32(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -612,12 +615,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToInt64(bytes!, 0);
+                        data = BitConverter.ToInt64(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -645,12 +648,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToUInt64(bytes!, 0);
+                        data = BitConverter.ToUInt64(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -678,12 +681,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToSingle(bytes!, 0);
+                        data = BitConverter.ToSingle(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -711,12 +714,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, size);
+                bool result = Get(out byte[] bytes, position, size);
                 if (result)
                 {
                     try
                     {
-                        data = BitConverter.ToDouble(bytes!, 0);
+                        data = BitConverter.ToDouble(bytes, 0);
                     }
                     catch (Exception ex)
                     {
@@ -744,12 +747,12 @@ namespace CSUtil
                     return false;
                 }
 
-                bool result = Get(out byte[]? bytes, position, length);
+                bool result = Get(out byte[] bytes, position, length);
                 if (result)
                 {
                     try
                     {
-                        data = Encoding.ASCII.GetString(bytes!);
+                        data = Encoding.ASCII.GetString(bytes);
                     }
                     catch (Exception ex)
                     {

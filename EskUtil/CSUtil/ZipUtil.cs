@@ -1,8 +1,10 @@
 ﻿// ======================================================================================================
 // File Name        : ZipUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.01.27 - yc.jeon
+// Last Update      : 2025.05.19 - yc.jeon
 // ======================================================================================================
+
+using System.IO;
 
 namespace CSUtil
 {
@@ -137,15 +139,15 @@ namespace CSUtil
                 return ZipResult.FailZipDirNotExist;
             }
 
-            string ext = targetFile.Substring(targetFile.LastIndexOf(".") + 1);
-            if (string.Compare(ext, Extension, true) != 0)
+            string ext = targetFile.Substring(targetFile.LastIndexOfOrdinal(".") + 1);
+            if (!ext.EqualsIgnoreCase(Extension))
             {
                 return ZipResult.FailNotZipFile;
             }
 
             if (string.IsNullOrEmpty(targetDir))
             {
-                targetDir = targetFile.Substring(0, targetFile.LastIndexOf("."));
+                targetDir = targetFile.Substring(0, targetFile.LastIndexOfOrdinal("."));
             }
 
             try

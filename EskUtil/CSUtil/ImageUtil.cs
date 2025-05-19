@@ -1,9 +1,10 @@
 ﻿// ======================================================================================================
 // File Name        : ImageUtil.cs
 // Project          : CSUtil
-// Last Update      : 2024.02.17 - yc.jeon
+// Last Update      : 2025.05.19 - yc.jeon
 // ======================================================================================================
 
+using System;
 using System.Reflection;
 
 namespace CSUtil
@@ -18,7 +19,10 @@ namespace CSUtil
         /// <exception cref="ArgumentException" />
         public static Uri GetUriFromResource(string resourcePath)
         {
-            ArgumentException.ThrowIfNullOrEmpty(resourcePath, nameof(resourcePath));
+            if (string.IsNullOrEmpty(resourcePath))
+            {
+                throw new ArgumentNullException(nameof(resourcePath));
+            }
 
             Assembly assm = Assembly.GetCallingAssembly();
             if (resourcePath[0].Equals('/'))
@@ -26,7 +30,7 @@ namespace CSUtil
                 resourcePath = resourcePath.Substring(1);
             }
 
-            return new Uri(@$"pack://application:,,,/{assm.GetName().Name};component/{resourcePath}", UriKind.Absolute);
+            return new Uri($@"pack://application:,,,/{assm.GetName().Name};component/{resourcePath}", UriKind.Absolute);
         }
     }
 }

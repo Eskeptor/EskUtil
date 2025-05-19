@@ -1,10 +1,13 @@
 ﻿// ======================================================================================================
 // File Name        : DataType.cs
 // Project          : CSUtil
-// Last Update      : 2024.02.17 - yc.jeon
+// Last Update      : 2025.05.19 - yc.jeon
 // ======================================================================================================
 
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace CSUtil
 {
@@ -18,183 +21,56 @@ namespace CSUtil
         /// </summary>
         public enum Types
         {
-            STRING,     // STR_STRING
-            BOOL,       // STR_BOOL
-            CHAR,       // STR_CHAR
-            SHORT,      // STR_SHORT
-            USHORT,     // STR_USHORT
-            FLOAT,      // STR_FLOAT
-            INT,        // STR_INT
-            UINT,       // STR_UINT
-            DOUBLE,     // STR_DOUBLE
-            LONG,       // STR_LONG
-            ULONG,      // STR_ULONG
-            BIT,        // STR_BIT
-            BYTE,       // STR_BYTE
-            SBYTE,      // STR_SBYTE
-            DATETIME,   // STR_DATETIME
-            LIST,       // STR_LIST
+            Null,       // STR_NULL
+            String,     // STR_STRING
+            Bool,       // STR_BOOL
+            Bit,        // STR_BIT
+            Int8,       // STR_INT8
+            UInt8,      // STR_UINT8
+            Int16,      // STR_INT16
+            UInt16,     // STR_UINT16
+            Int32,      // STR_INT32
+            UInt32,     // STR_UINT32
+            Int64,      // STR_INT64
+            UInt64,     // STR_UINT64
+            Float,      // STR_FLOAT
+            Double,     // STR_DOUBLE
+            DateTime,   // STR_DATETIME
         }
-
-        /// <summary>
-        /// Types.STRING의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_STRING = "STRING";
-        /// <summary>
-        /// Types.BOOL의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_BOOL = "BOOL";
-        /// <summary>
-        /// Types.CHAR의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_CHAR = "CHAR";
-        /// <summary>
-        /// Types.SHORT의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_SHORT = "SHORT";
-        /// <summary>
-        /// Types.USHORT의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_USHORT = "USHORT";
-        /// <summary>
-        /// Types.FLOAT의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_FLOAT = "FLOAT";
-        /// <summary>
-        /// Types.INT의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_INT = "INT";
-        /// <summary>
-        /// Types.UINT의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_UINT = "UINT";
-        /// <summary>
-        /// Types.DOUBLE의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_DOUBLE = "DOUBLE";
-        /// <summary>
-        /// Types.LONG의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_LONG = "LONG";
-        /// <summary>
-        /// Types.ULONG의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_ULONG = "ULONG";
-        /// <summary>
-        /// Types.BIT의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_BIT = "BIT";
-        /// <summary>
-        /// Types.BYTE의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_BYTE = "BYTE";
-        /// <summary>
-        /// Types.SBYTE의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_SBYTE = "SBYTE";
-        /// <summary>
-        /// Types.DATETIME의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_DATETIME = "DATETIME";
-        /// <summary>
-        /// Types.LIST의 String 타입값 (Upper case)
-        /// </summary>
-        public const string STR_LIST = "LIST";
-
-        /// <summary>
-        /// Types.STRING의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_STRING_L = "string";
-        /// <summary>
-        /// Types.BOOL의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_BOOL_L = "bool";
-        /// <summary>
-        /// Types.CHAR의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_CHAR_L = "char";
-        /// <summary>
-        /// Types.SHORT의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_SHORT_L = "short";
-        /// <summary>
-        /// Types.USHORT의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_USHORT_L = "ushort";
-        /// <summary>
-        /// Types.FLOAT의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_FLOAT_L = "float";
-        /// <summary>
-        /// Types.INT의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_INT_L = "int";
-        /// <summary>
-        /// Types.UINT의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_UINT_L = "uint";
-        /// <summary>
-        /// Types.DOUBLE의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_DOUBLE_L = "double";
-        /// <summary>
-        /// Types.LONG의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_LONG_L = "long";
-        /// <summary>
-        /// Types.ULONG의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_ULONG_L = "ulong";
-        /// <summary>
-        /// Types.BIT의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_BIT_L = "bit";
-        /// <summary>
-        /// Types.BYTE의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_BYTE_L = "byte";
-        /// <summary>
-        /// Types.SBYTE의 String 타입값 (Lower case);
-        /// </summary>
-        public const string STR_SBYTE_L = "sbyte";
-        /// <summary>
-        /// Types.DATETIME의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_DATETIME_L = "datetime";
-        /// <summary>
-        /// Types.LIST의 String 타입값 (Lower case)
-        /// </summary>
-        public const string STR_LIST_L = "list";
 
         /// <summary>
         /// DefinedData를 정의하기 위한 클래스
         /// </summary>
-        public struct DataTypeCls
+        public struct DataTypeCls : IEquatable<DataTypeCls>
         {
             /// <summary>
             /// 자료형의 Types (enum)
             /// </summary>
-            public Types Type { get; private set; }
+            public Types Type { get; }
             /// <summary>
             /// 자료형의 Types (String)
             /// </summary>
-            public string TypeToString { get; private set; }
+            public string TypeToString { get; }
             /// <summary>
             /// 자료형의 바이트 크기
             /// </summary>
-            public int ByteSize { get; private set; }
+            public int ByteSize { get; }
             /// <summary>
             /// 자료형의 실제 Type(typeof)
             /// </summary>
-            public Type RealType { get; private set; }
+            public Type RealType { get; }
+            /// <summary>
+            /// 해당 자료형의 OPC-UA BuiltIn Type
+            /// </summary>
+            public int OpcUaBuiltInType { get; }
             /// <summary>
             /// 해당 자료형의 최소값
             /// </summary>
-            public double MinValue { get; private set; }
+            public double MinValue { get; }
             /// <summary>
             /// 해당 자료형의 최대값
             /// </summary>
-            public double MaxValue { get; private set; }
+            public double MaxValue { get; }
 
             /// <summary>
             /// 생성자
@@ -202,74 +78,84 @@ namespace CSUtil
             /// <param name="enumType">자료형의 Types (enum)</param>
             /// <param name="byteSize">자료형의 바이트 크기</param>
             /// <param name="realType">자료형의 실제 Type(typeof)</param>
+            /// <param name="opcuaBuiltInType">자료형의 OPC-UA에서의 자료형 타입</param>
             /// <param name="minValue">자료형의 최소값</param>
             /// <param name="maxValue">자료형의 최대값</param>
-            public DataTypeCls(Types enumType, int byteSize, Type realType, double minValue, double maxValue)
+            public DataTypeCls(Types enumType, int byteSize, Type realType, int opcuaBuiltInType, double minValue, double maxValue)
             {
                 Type = enumType;
-                TypeToString = DefinedTypes[enumType].Item1;
+                TypeToString = enumType.ToString();
                 ByteSize = byteSize;
                 RealType = realType;
+                OpcUaBuiltInType = opcuaBuiltInType;
                 MinValue = minValue;
                 MaxValue = maxValue;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (!(obj is DataTypeCls equals))
+                {
+                    return false;
+                }
+
+                return Type == equals.Type && ByteSize == equals.ByteSize &&
+                    RealType == equals.RealType && OpcUaBuiltInType == equals.OpcUaBuiltInType &&
+                    MinValue == equals.MinValue && MaxValue == equals.MaxValue;
+            }
+
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(Type, TypeToString, ByteSize, RealType, OpcUaBuiltInType, MinValue, MaxValue);
+            }
+
+            public static bool operator ==(DataTypeCls left, DataTypeCls right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(DataTypeCls left, DataTypeCls right)
+            {
+                return !(left == right);
+            }
+
+            public bool Equals(DataTypeCls other)
+            {
+                return Type == other.Type && ByteSize == other.ByteSize &&
+                    RealType == other.RealType && OpcUaBuiltInType == other.OpcUaBuiltInType &&
+                    MinValue == other.MinValue && MaxValue == other.MaxValue;
             }
         }
 
         /// <summary>
-        /// 정의된 자료형(string 타입)
+        /// Double이 지원하는 long의 최대값
         /// </summary>
-        public static readonly Dictionary<Types, Tuple<string, int>> DefinedTypes = new Dictionary<Types, Tuple<string, int>>
-        {
-            { Types.STRING, new Tuple<string, int>(STR_STRING, (int)Types.STRING) },
-            { Types.BOOL, new Tuple<string, int>(STR_BOOL, (int)Types.BOOL) },
-            { Types.CHAR, new Tuple<string, int>(STR_CHAR, (int)Types.CHAR) },
-            { Types.SHORT, new Tuple<string, int>(STR_SHORT, (int)Types.SHORT) },
-            { Types.USHORT, new Tuple<string, int>(STR_USHORT, (int)Types.USHORT) },
-            { Types.FLOAT, new Tuple<string, int>(STR_FLOAT, (int)Types.FLOAT) },
-            { Types.INT, new Tuple<string, int>(STR_INT, (int)Types.INT) },
-            { Types.UINT, new Tuple<string, int>(STR_UINT, (int)Types.UINT) },
-            { Types.DOUBLE, new Tuple<string, int>(STR_DOUBLE, (int)Types.DOUBLE) },
-            { Types.LONG, new Tuple<string, int>(STR_LONG, (int)Types.LONG) },
-            { Types.ULONG, new Tuple<string, int>(STR_ULONG, (int)Types.ULONG) },
-            { Types.BIT, new Tuple<string, int>(STR_BIT, (int)Types.BIT) },
-            { Types.BYTE, new Tuple<string, int>(STR_BYTE, (int)Types.BYTE) },
-            { Types.SBYTE, new Tuple<string, int>(STR_SBYTE, (int)Types.SBYTE) },
-            { Types.DATETIME, new Tuple<string, int>(STR_DATETIME, (int)Types.DATETIME) },
-            { Types.LIST, new Tuple<string, int>(STR_LIST, (int)Types.LIST) },
-        };
+        public const long SAFE_MAX_LONG_DOUBLE = 9007199254740991L;
+        /// <summary>
+        /// Double이 지원하는 long의 최소값
+        /// </summary>
+        public const long SAFE_MIN_LONG_DOUBLE = -9007199254740991L;
 
         /// <summary>
         /// 정의된 자료형 (실제로 사용할 수 있는)
         /// </summary>
-        public static readonly Dictionary<string, DataTypeCls> DefinedData = new Dictionary<string, DataTypeCls>
+        public static IReadOnlyDictionary<Types, DataTypeCls> DefinedData { get; } = new Dictionary<Types, DataTypeCls>()
         {
-            { DefinedTypes[Types.STRING].Item1, new DataTypeCls(Types.STRING, 1, typeof(string), 0.0, 0.0) },
-            { DefinedTypes[Types.BOOL].Item1, new DataTypeCls(Types.BOOL, 1, typeof(bool), 0.0, 1.0) },
-            { DefinedTypes[Types.CHAR].Item1, new DataTypeCls(Types.CHAR, 1, typeof(char), char.MinValue, char.MaxValue) },
-            { DefinedTypes[Types.SHORT].Item1, new DataTypeCls(Types.SHORT, 2, typeof(short), short.MinValue, short.MaxValue) },
-            { DefinedTypes[Types.USHORT].Item1, new DataTypeCls(Types.USHORT, 2, typeof(ushort), ushort.MinValue, ushort.MaxValue) },
-            { DefinedTypes[Types.FLOAT].Item1, new DataTypeCls(Types.FLOAT, 4, typeof(float), float.MinValue, float.MaxValue) },
-            { DefinedTypes[Types.INT].Item1, new DataTypeCls(Types.INT, 4, typeof(int), int.MinValue, int.MaxValue) },
-            { DefinedTypes[Types.UINT].Item1, new DataTypeCls(Types.UINT, 4, typeof(uint), uint.MinValue, uint.MaxValue) },
-            { DefinedTypes[Types.DOUBLE].Item1, new DataTypeCls(Types.DOUBLE, 8, typeof(double), double.MinValue, double.MaxValue) },
-            { DefinedTypes[Types.LONG].Item1, new DataTypeCls(Types.LONG, 8, typeof(long), long.MinValue, long.MaxValue) },
-            { DefinedTypes[Types.ULONG].Item1, new DataTypeCls(Types.ULONG, 8, typeof(ulong), ulong.MinValue, ulong.MaxValue) },
-            { DefinedTypes[Types.BIT].Item1, new DataTypeCls(Types.BIT, 1, typeof(byte), byte.MinValue, byte.MaxValue) },
-            { DefinedTypes[Types.BYTE].Item1, new DataTypeCls(Types.BYTE, 1, typeof(byte), byte.MinValue, byte.MaxValue) },
-            { DefinedTypes[Types.SBYTE].Item1, new DataTypeCls(Types.SBYTE, 1, typeof(sbyte), sbyte.MinValue, sbyte.MaxValue) },
-            { DefinedTypes[Types.DATETIME].Item1, new DataTypeCls(Types.DATETIME, 8, typeof(DateTime), 0.0, 0.0) },
-            { DefinedTypes[Types.LIST].Item1, new DataTypeCls(Types.LIST, 8, typeof(string), 0.0, 0.0) }
+            { Types.String, new DataTypeCls(Types.String, 1, typeof(string), 12, 0.0, 0.0) },
+            { Types.Bool, new DataTypeCls(Types.Bool, 1, typeof(bool), 1, 0.0, 1.0) },
+            { Types.Int16, new DataTypeCls(Types.Int16, 2, typeof(short), 4, short.MinValue, short.MaxValue) },
+            { Types.UInt16, new DataTypeCls(Types.UInt16, 2, typeof(ushort), 5, ushort.MinValue, ushort.MaxValue) },
+            { Types.Float, new DataTypeCls(Types.Float, 4, typeof(float), 10, float.MinValue, float.MaxValue) },
+            { Types.Int32, new DataTypeCls(Types.Int32, 4, typeof(int), 6, int.MinValue, int.MaxValue) },
+            { Types.UInt32, new DataTypeCls(Types.UInt32, 4, typeof(uint), 7, uint.MinValue, uint.MaxValue) },
+            { Types.Double, new DataTypeCls(Types.Double, 8, typeof(double), 11, double.MinValue, double.MaxValue) },
+            { Types.Int64, new DataTypeCls(Types.Int64, 8, typeof(long), 8, SAFE_MIN_LONG_DOUBLE, SAFE_MAX_LONG_DOUBLE) },
+            { Types.UInt64, new DataTypeCls(Types.UInt64, 8, typeof(ulong), 9, 0, SAFE_MAX_LONG_DOUBLE) },
+            { Types.Bit, new DataTypeCls(Types.Bit, 1, typeof(byte), 3, byte.MinValue, byte.MaxValue) },
+            { Types.UInt8, new DataTypeCls(Types.UInt8, 1, typeof(byte), 3, byte.MinValue, byte.MaxValue) },
+            { Types.Int8, new DataTypeCls(Types.Int8, 1, typeof(sbyte), 3, sbyte.MinValue, sbyte.MaxValue) },
+            { Types.DateTime, new DataTypeCls(Types.DateTime, 8, typeof(DateTime), 13, 0.0, 0.0) },
         };
-
-        /// <summary>
-        /// 유효한 데이터 타입인지 확인하는 함수
-        /// </summary>
-        /// <param name="typeName">확인할 데이터 타입</param>
-        /// <returns>true: 유효, false: 유효하지 않음</returns>
-        public static bool IsValidType(string typeName)
-        {
-            return DefinedData.ContainsKey(typeName);
-        }
 
         /// <summary>
         /// 문자열(String) 데이터를 각자의 형으로 변환하고 object로 반환하는 함수
@@ -279,14 +165,14 @@ namespace CSUtil
         /// <param name="size">원본 데이터의 개수</param>
         /// <param name="token">원본 데이터가 배열인 경우 문자열을 자를 문자 단위</param>
         /// <returns>변환된 값</returns>
-        public static object? StringToObject(string value, string dataType, int size, char token)
+        public static object StringToObject(string value, string dataType, int size, char token)
         {
-            if (!DefinedData.TryGetValue(dataType, out DataTypeCls dataTypeCls))
+            if (!Enum.TryParse(dataType, out Types type))
             {
                 return null;
             }
 
-            return StringToObject(value, dataTypeCls.Type, size, token);
+            return StringToObject(value, type, size, token);
         }
 
         /// <summary>
@@ -297,194 +183,231 @@ namespace CSUtil
         /// <param name="size">원본 데이터의 개수</param>
         /// <param name="token">원본 데이터가 배열인 경우 문자열을 자를 문자 단위</param>
         /// <returns>변환된 값</returns>
-        public static object? StringToObject(string value, Types dataType, int size, char token)
+        public static object StringToObject(string value, Types dataType, int size, char token)
         {
             try
             {
                 switch (dataType)
                 {
-                    case Types.STRING:
+                    case Types.String:
                         return value;
-                    case Types.BOOL:
+                    case Types.Bool:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new bool[size];
                             }
 
                             string[] splits = value.Split(token);
-                            bool[] datas = splits.Select(ch => ch == "true").ToArray();
+                            bool[] datas = new bool[splits.Length];
+                            for (int i = 0; i < datas.Length; ++i)
+                            {
+                                if (bool.TryParse(splits[i], out bool result))
+                                {
+                                    datas[i] = result;
+                                }
+                            }
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? false : Convert.ToBoolean(value);
-                    case Types.BIT:
-                    case Types.BYTE:
+                        else
+                        {
+                            if (string.IsNullOrWhiteSpace(value))
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    return bool.Parse(value);
+                                }
+                                catch
+                                {
+                                    return !value.EqualsOrdinal("0") && !value.EqualsOrdinal("0.0");
+                                }
+                            }
+                        }
+                    case Types.Bit:
+                    case Types.UInt8:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new byte[size];
                             }
 
                             string[] splits = value.Split(token);
-                            byte[] datas = Array.ConvertAll(splits, Convert.ToByte);
+                            byte[] datas = System.Array.ConvertAll(splits, byte.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? (byte)0 : Convert.ToByte(value);
-                    case Types.SBYTE:
+                        return string.IsNullOrWhiteSpace(value) ? (byte)0 : value.ParseByte();
+                    case Types.Int8:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new sbyte[size];
                             }
 
                             string[] splits = value.Split(token);
-                            sbyte[] datas = Array.ConvertAll(splits, Convert.ToSByte);
+                            sbyte[] datas = System.Array.ConvertAll(splits, sbyte.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? (sbyte)0 : Convert.ToSByte(value);
-                    case Types.CHAR:
+                        return string.IsNullOrWhiteSpace(value) ? (sbyte)0 : value.ParseSByte();
+                    case Types.Int16:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
-                            {
-                                return new char[size];
-                            }
-
-                            string[] splits = value.Split(token);
-                            char[] datas = Array.ConvertAll(splits, Convert.ToChar);
-                            return datas;
-                        }
-                        return string.IsNullOrEmpty(value) ? char.MinValue : Convert.ToChar(value);
-                    case Types.SHORT:
-                        if (size > 1)
-                        {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new short[size];
                             }
 
                             string[] splits = value.Split(token);
-                            short[] datas = Array.ConvertAll(splits, Convert.ToInt16);
+                            short[] datas = System.Array.ConvertAll(splits, short.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? (short)0 : Convert.ToInt16(value);
-                    case Types.USHORT:
+                        return string.IsNullOrWhiteSpace(value) ? (short)0 : value.ParseShort();
+                    case Types.UInt16:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new ushort[size];
                             }
 
                             string[] splits = value.Split(token);
-                            ushort[] datas = Array.ConvertAll(splits, Convert.ToUInt16);
+                            ushort[] datas = System.Array.ConvertAll(splits, ushort.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? (ushort)0 : Convert.ToUInt16(value);
-                    case Types.INT:
+                        return string.IsNullOrWhiteSpace(value) ? (ushort)0 : value.ParseUShort();
+                    case Types.Int32:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new int[size];
                             }
 
                             string[] splits = value.Split(token);
-                            int[] datas = Array.ConvertAll(splits, Convert.ToInt32);
+                            int[] datas = System.Array.ConvertAll(splits, int.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? 0 : Convert.ToInt32(value);
-                    case Types.UINT:
+                        return string.IsNullOrWhiteSpace(value) ? 0 : value.ParseInt();
+                    case Types.UInt32:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new uint[size];
                             }
 
                             string[] splits = value.Split(token);
-                            uint[] datas = Array.ConvertAll(splits, Convert.ToUInt32);
+                            uint[] datas = System.Array.ConvertAll(splits, uint.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? 0 : Convert.ToUInt32(value);
-                    case Types.LONG:
+                        return string.IsNullOrWhiteSpace(value) ? 0 : value.ParseUInt();
+                    case Types.Int64:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new long[size];
                             }
 
                             string[] splits = value.Split(token);
-                            long[] datas = Array.ConvertAll(splits, Convert.ToInt64);
+                            long[] datas = System.Array.ConvertAll(splits, long.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? 0L : Convert.ToInt64(value);
-                    case Types.ULONG:
+                        return string.IsNullOrWhiteSpace(value) ? 0L : value.ParseLong();
+                    case Types.UInt64:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new ulong[size];
                             }
 
                             string[] splits = value.Split(token);
-                            ulong[] datas = Array.ConvertAll(splits, Convert.ToUInt64);
+                            ulong[] datas = System.Array.ConvertAll(splits, ulong.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? 0UL : Convert.ToUInt64(value);
-                    case Types.FLOAT:
+                        return string.IsNullOrWhiteSpace(value) ? 0UL : value.ParseULong();
+                    case Types.Float:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new float[size];
                             }
 
                             string[] splits = value.Split(token);
-                            float[] datas = Array.ConvertAll(splits, Convert.ToSingle);
+                            float[] datas = System.Array.ConvertAll(splits, float.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? 0.0F : Convert.ToSingle(value);
-                    case Types.DOUBLE:
+                        return string.IsNullOrWhiteSpace(value) ? 0.0F : value.ParseFloat();
+                    case Types.Double:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new double[size];
                             }
 
                             string[] splits = value.Split(token);
-                            double[] datas = Array.ConvertAll(splits, Convert.ToDouble);
+                            double[] datas = System.Array.ConvertAll(splits, double.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? 0.0 : Convert.ToDouble(value);
-                    case Types.DATETIME:
+                        return string.IsNullOrWhiteSpace(value) ? 0.0 : value.ParseDouble();
+                    case Types.DateTime:
                         if (size > 1)
                         {
-                            if (string.IsNullOrEmpty(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 return new DateTime[size];
                             }
 
                             string[] splits = value.Split(token);
-                            DateTime[] datas = Array.ConvertAll(splits, DateTime.Parse);
+                            DateTime[] datas = System.Array.ConvertAll(splits, DateTime.Parse);
                             return datas;
                         }
-                        return string.IsNullOrEmpty(value) ? DateTime.MinValue : DateTime.Parse(value);
+                        return string.IsNullOrWhiteSpace(value) ? DateTime.MinValue : value.ParseDateTime();
+                    default:
+                        throw new InvalidTypeException("Invalid Types", nameof(dataType));
                 }
             }
             catch (Exception ex)
             {
-#if DEBUG
-                Debug.WriteLine($"StringToObject: {ex}");
-#endif
-            }
+                Debug.WriteLine(ex.ToString());
 
-            return null;
+                double dData = Convert.ToDouble(value, CultureInfo.InvariantCulture);
+                switch (dataType)
+                {
+                    case Types.Bit:
+                    case Types.UInt8:
+                        return Convert.ToByte(dData);
+                    case Types.Int8:
+                        return Convert.ToSByte(dData);
+                    case Types.Int16:
+                        return Convert.ToInt16(dData);
+                    case Types.UInt16:
+                        return Convert.ToUInt16(dData);
+                    case Types.Int32:
+                        return Convert.ToInt32(dData);
+                    case Types.UInt32:
+                        return Convert.ToUInt32(dData);
+                    case Types.Int64:
+                        return Convert.ToInt64(dData);
+                    case Types.UInt64:
+                        return Convert.ToUInt64(dData);
+                    case Types.Float:
+                        return Convert.ToSingle(dData);
+                    case Types.Double:
+                        return Convert.ToDouble(dData);
+                    default:
+                        return null;
+                }
+            }
         }
 
         /// <summary>
@@ -497,12 +420,12 @@ namespace CSUtil
         /// <returns>변환된 문자열</returns>
         public static string ObjectToString(object value, string dataType, int size, char token)
         {
-            if (!DefinedData.TryGetValue(dataType, out DataTypeCls dataTypeCls))
+            if (!Enum.TryParse(dataType, out Types type))
             {
                 return string.Empty;
             }
 
-            return ObjectToString(value, dataTypeCls.Type, size, token);
+            return ObjectToString(value, type, size, token);
         }
 
         /// <summary>
@@ -515,7 +438,7 @@ namespace CSUtil
         /// <returns>변환된 문자열</returns>
         public static string ObjectToString(object value, Types dataType, int size, char token)
         {
-            string result = string.Empty;
+            string result;
 
             if (value == null)
             {
@@ -524,98 +447,92 @@ namespace CSUtil
 
             if (size == 1)
             {
-                result = value.ToString()!.TrimEnd('\0');
+                result = value.ToString().TrimEnd('\0');
             }
             else
             {
                 switch (dataType)
                 {
-                    case Types.STRING:
+                    case Types.String:
                         {
-                            result = value.ToString()!.TrimEnd('\0');
-                            //string[] datas = (string[])value;
-                            //result = UtilFunc.OneLineStringWidthChar(datas, token);
+                            result = value.ToString().TrimEnd('\0');
                         }
                         break;
-                    case Types.BOOL:
+                    case Types.Bool:
                         {
                             bool[] datas = (bool[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.BIT:
-                    case Types.BYTE:
+                    case Types.Bit:
+                    case Types.UInt8:
                         {
                             byte[] datas = (byte[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.SBYTE:
+                    case Types.Int8:
                         {
                             sbyte[] datas = (sbyte[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.CHAR:
-                        {
-                            char[] datas = (char[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
-                        }
-                        break;
-                    case Types.SHORT:
+                    case Types.Int16:
                         {
                             short[] datas = (short[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.USHORT:
+                    case Types.UInt16:
                         {
                             ushort[] datas = (ushort[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.INT:
+                    case Types.Int32:
                         {
                             int[] datas = (int[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.UINT:
+                    case Types.UInt32:
                         {
                             uint[] datas = (uint[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.LONG:
+                    case Types.Int64:
                         {
                             long[] datas = (long[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.ULONG:
+                    case Types.UInt64:
                         {
                             ulong[] datas = (ulong[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.FLOAT:
+                    case Types.Float:
                         {
                             float[] datas = (float[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.DOUBLE:
+                    case Types.Double:
                         {
                             double[] datas = (double[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
-                    case Types.DATETIME:
+                    case Types.DateTime:
                         {
                             DateTime[] datas = (DateTime[])value;
-                            result = ExtensionUtil.OneLineStringWidthChar(datas, token);
+                            result = datas.OneLineString(token);
                         }
                         break;
+                    default:
+                        throw new InvalidTypeException("Invalid Types", nameof(dataType));
                 }
             }
 
@@ -628,14 +545,14 @@ namespace CSUtil
         /// <param name="dataType">데이터 타입</param>
         /// <param name="size">데이터 개수(바이트 길이 아님)</param>
         /// <returns>만들어진 object</returns>
-        public static object? MakeObject(string dataType, int size)
+        public static object MakeObject(string dataType, int size)
         {
-            if (!DefinedData.TryGetValue(dataType, out DataTypeCls dataTypeCls))
+            if (!Enum.TryParse(dataType, out Types type))
             {
                 return null;
             }
 
-            return MakeObject(dataTypeCls.Type, size);
+            return MakeObject(type, size);
         }
         /// <summary>
         /// 자료형에 맞는 초기 데이터를 만들어 object 형식으로 반환하는 함수
@@ -643,53 +560,142 @@ namespace CSUtil
         /// <param name="dataType">데이터 타입</param>
         /// <param name="size">데이터 개수(바이트 길이 아님)</param>
         /// <returns>만들어진 object</returns>
-        public static object? MakeObject(Types dataType, int size)
+        public static object MakeObject(Types dataType, int size)
         {
             if (size <= 0)
             {
                 return null;
             }
 
-            object? objValue = null;
+            object objValue;
             switch (dataType)
             {
-                case Types.BYTE:
-                case Types.BIT:
-                    objValue = size > 1 ? new byte[size] : (byte)0;
+                case Types.UInt8:
+                case Types.Bit:
+                    if (size > 1)
+                    {
+                        objValue = new byte[size];
+                    }
+                    else
+                    {
+                        objValue = (byte)0;
+                    }
                     break;
-                case Types.BOOL:
-                    objValue = size > 1 ? new bool[size] : false;
+                case Types.Bool:
+                    if (size > 1)
+                    {
+                        objValue = new bool[size];
+                    }
+                    else
+                    {
+                        objValue = false;
+                    }
                     break;
-                case Types.STRING:
+                case Types.String:
                     objValue = string.Empty;
                     break;
-                case Types.SHORT:
-                    objValue = size > 1 ? new short[size] : (short)0;
+                case Types.Int8:
+                    if (size > 1)
+                    {
+                        objValue = new sbyte[size];
+                    }
+                    else
+                    {
+                        objValue = (sbyte)0;
+                    }
                     break;
-                case Types.USHORT:
-                    objValue = size > 1 ? new ushort[size] : (ushort)0;
+                case Types.Int16:
+                    if (size > 1)
+                    {
+                        objValue = new short[size];
+                    }
+                    else
+                    {
+                        objValue = (short)0;
+                    }
                     break;
-                case Types.INT:
-                    objValue = size > 1 ? new int[size] : 0;
+                case Types.UInt16:
+                    if (size > 1)
+                    {
+                        objValue = new ushort[size];
+                    }
+                    else
+                    {
+                        objValue = (ushort)0;
+                    }
                     break;
-                case Types.UINT:
-                    objValue = size > 1 ? new uint[size] : (uint)0;
+                case Types.Int32:
+                    if (size > 1)
+                    {
+                        objValue = new int[size];
+                    }
+                    else
+                    {
+                        objValue = 0;
+                    }
                     break;
-                case Types.LONG:
-                    objValue = size > 1 ? new long[size] : 0L;
+                case Types.UInt32:
+                    if (size > 1)
+                    {
+                        objValue = new uint[size];
+                    }
+                    else
+                    {
+                        objValue = (uint)0;
+                    }
                     break;
-                case Types.ULONG:
-                    objValue = size > 1 ? new ulong[size] : 0UL;
+                case Types.Int64:
+                    if (size > 1)
+                    {
+                        objValue = new long[size];
+                    }
+                    else
+                    {
+                        objValue = 0L;
+                    }
                     break;
-                case Types.FLOAT:
-                    objValue = size > 1 ? new float[size] : 0.0F;
+                case Types.UInt64:
+                    if (size > 1)
+                    {
+                        objValue = new ulong[size];
+                    }
+                    else
+                    {
+                        objValue = 0UL;
+                    }
                     break;
-                case Types.DOUBLE:
-                    objValue = size > 1 ? new double[size] : 0.0;
+                case Types.Float:
+                    if (size > 1)
+                    {
+                        objValue = new float[size];
+                    }
+                    else
+                    {
+                        objValue = 0.0F;
+                    }
                     break;
-                case Types.DATETIME:
-                    objValue = size > 1 ? new DateTime[size] : DateTime.Now;
+                case Types.Double:
+                    if (size > 1)
+                    {
+                        objValue = new double[size];
+                    }
+                    else
+                    {
+                        objValue = 0.0;
+                    }
                     break;
+                case Types.DateTime:
+                    if (size > 1)
+                    {
+                        objValue = new DateTime[size];
+                    }
+                    else
+                    {
+                        objValue = DateTime.Now;
+                    }
+                    break;
+                default:
+                    throw new InvalidTypeException("Invalid Types", nameof(dataType));
             }
 
             return objValue;
@@ -701,14 +707,14 @@ namespace CSUtil
         /// <param name="srcData">원본 데이터</param>
         /// <param name="destType">변환할 타입</param>
         /// <returns>변환한 데이터</returns>
-        public static object? DataToObject(object srcData, string destType)
+        public static object DataToObject(object srcData, string destType)
         {
-            if (!DefinedData.TryGetValue(destType, out DataTypeCls dataTypeCls))
+            if (!Enum.TryParse(destType, out Types type))
             {
                 return null;
             }
 
-            return DataToObject(srcData, dataTypeCls.Type);
+            return DataToObject(srcData, type);
         }
 
         /// <summary>
@@ -717,7 +723,7 @@ namespace CSUtil
         /// <param name="srcData">원본 데이터</param>
         /// <param name="destType">변환할 타입</param>
         /// <returns>변환한 데이터</returns>
-        public static object? DataToObject<T>(T srcData, Types destType)
+        public static object DataToObject<T>(T srcData, Types destType)
         {
             if (srcData == null)
             {
@@ -728,42 +734,40 @@ namespace CSUtil
             {
                 switch (destType)
                 {
-                    case Types.STRING:
+                    case Types.String:
                         return srcData.ToString();
-                    case Types.BOOL:
-                        return Convert.ToBoolean(srcData);
-                    case Types.BIT:
-                    case Types.BYTE:
-                        return Convert.ToByte(srcData);
-                    case Types.SBYTE:
-                        return Convert.ToSByte(srcData);
-                    case Types.CHAR:
-                        return Convert.ToChar(srcData);
-                    case Types.SHORT:
-                        return Convert.ToInt16(srcData);
-                    case Types.USHORT:
-                        return Convert.ToUInt16(srcData);
-                    case Types.INT:
-                        return Convert.ToInt32(srcData);
-                    case Types.UINT:
-                        return Convert.ToUInt32(srcData);
-                    case Types.LONG:
-                        return Convert.ToInt64(srcData);
-                    case Types.ULONG:
-                        return Convert.ToUInt64(srcData);
-                    case Types.FLOAT:
-                        return Convert.ToSingle(srcData);
-                    case Types.DOUBLE:
-                        return Convert.ToDouble(srcData);
-                    case Types.DATETIME:
-                        return Convert.ToDateTime(srcData);
+                    case Types.Bool:
+                        return Convert.ToBoolean(srcData, CultureInfo.InvariantCulture);
+                    case Types.Bit:
+                    case Types.UInt8:
+                        return Convert.ToByte(srcData, CultureInfo.InvariantCulture);
+                    case Types.Int8:
+                        return Convert.ToSByte(srcData, CultureInfo.InvariantCulture);
+                    case Types.Int16:
+                        return Convert.ToInt16(srcData, CultureInfo.InvariantCulture);
+                    case Types.UInt16:
+                        return Convert.ToUInt16(srcData, CultureInfo.InvariantCulture);
+                    case Types.Int32:
+                        return Convert.ToInt32(srcData, CultureInfo.InvariantCulture);
+                    case Types.UInt32:
+                        return Convert.ToUInt32(srcData, CultureInfo.InvariantCulture);
+                    case Types.Int64:
+                        return Convert.ToInt64(srcData, CultureInfo.InvariantCulture);
+                    case Types.UInt64:
+                        return Convert.ToUInt64(srcData, CultureInfo.InvariantCulture);
+                    case Types.Float:
+                        return Convert.ToSingle(srcData, CultureInfo.InvariantCulture);
+                    case Types.Double:
+                        return Convert.ToDouble(srcData, CultureInfo.InvariantCulture);
+                    case Types.DateTime:
+                        return Convert.ToDateTime(srcData, CultureInfo.InvariantCulture);
+                    default:
+                        throw new InvalidTypeException("Invalid Types", nameof(destType));
                 }
             }
             catch (Exception ex)
             {
-#if DEBUG
-                Debug.WriteLine($"DataToObject: {ex}");
-#endif
+                Debug.WriteLine($"Convert Exception({srcData}, {destType}): {ex}");
             }
 
             return null;
@@ -786,15 +790,15 @@ namespace CSUtil
         /// true: 실행 성공 <br/>
         /// false: 실행 실패 (data == null, Type Convert 실패)
         /// </returns>
-        public static bool DataMinMaxCheck(object data, Types dataType, int size, double min, double max, out object? resultData)
+        public static bool DataMinMaxCheck(object data, Types dataType, int size, double min, double max, out object resultData)
         {
             if (data == null)
             {
                 resultData = null;
                 return false;
             }
-            if (dataType == Types.STRING ||
-                size > 1)
+            bool isNotConvertType = dataType == Types.String || dataType == Types.Bool || dataType == Types.DateTime || size > 1;
+            if (isNotConvertType)
             {
                 resultData = data;
                 return true;
@@ -804,51 +808,42 @@ namespace CSUtil
 
             try
             {
-                double chkData = Convert.ToDouble(data);
+                double chkData = Convert.ToDouble(data, CultureInfo.InvariantCulture);
                 chkData = chkData < min ? min : chkData;
                 chkData = chkData > max ? max : chkData;
 
                 switch (dataType)
                 {
-                    case Types.BOOL:
-                        resultData = Convert.ToBoolean(chkData);
-                        break;
-                    case Types.BIT:
-                    case Types.BYTE:
+                    case Types.Bit:
+                    case Types.UInt8:
                         resultData = Convert.ToByte(chkData);
                         break;
-                    case Types.SBYTE:
+                    case Types.Int8:
                         resultData = Convert.ToSByte(chkData);
                         break;
-                    case Types.CHAR:
-                        resultData = Convert.ToChar(chkData);
-                        break;
-                    case Types.SHORT:
+                    case Types.Int16:
                         resultData = Convert.ToInt16(chkData);
                         break;
-                    case Types.USHORT:
+                    case Types.UInt16:
                         resultData = Convert.ToUInt16(chkData);
                         break;
-                    case Types.INT:
+                    case Types.Int32:
                         resultData = Convert.ToInt32(chkData);
                         break;
-                    case Types.UINT:
+                    case Types.UInt32:
                         resultData = Convert.ToUInt32(chkData);
                         break;
-                    case Types.LONG:
+                    case Types.Int64:
                         resultData = Convert.ToInt64(chkData);
                         break;
-                    case Types.ULONG:
+                    case Types.UInt64:
                         resultData = Convert.ToUInt64(chkData);
                         break;
-                    case Types.FLOAT:
+                    case Types.Float:
                         resultData = Convert.ToSingle(chkData);
                         break;
-                    case Types.DOUBLE:
+                    case Types.Double:
                         resultData = chkData;
-                        break;
-                    case Types.DATETIME:
-                        resultData = Convert.ToDateTime(chkData);
                         break;
                     default:
                         resultData = null;
@@ -856,13 +851,10 @@ namespace CSUtil
                         break;
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 resultData = null;
                 result = false;
-#if DEBUG
-                Debug.WriteLine($"DataMinMaxCheck: {ex}");
-#endif
             }
 
             return result;
@@ -885,15 +877,15 @@ namespace CSUtil
         /// true: 실행 성공 <br/>
         /// false: 실행 실패 (data == null, Type Convert 실패)
         /// </returns>
-        public static bool DataMinMaxCheck(object data, string dataType, int size, double min, double max, out object? resultData)
+        public static bool DataMinMaxCheck(object data, string dataType, int size, double min, double max, out object resultData)
         {
-            if (!DefinedData.TryGetValue(dataType, out DataTypeCls dataTypeCls))
+            if (!Enum.TryParse(dataType, out Types type))
             {
                 resultData = null;
                 return false;
             }
 
-            return DataMinMaxCheck(data, dataTypeCls.Type, size, min, max, out resultData);
+            return DataMinMaxCheck(data, type, size, min, max, out resultData);
         }
 
         /// <summary>
@@ -916,15 +908,15 @@ namespace CSUtil
         /// true: 실행 성공 <br/>
         /// false: 실행 실패 (data == null, Type Convert 실패)
         /// </returns>
-        public static bool DataMinMaxCheck(object data, Types dataType, int size, double min, double max, double defaultValue, out object? resultData)
+        public static bool DataMinMaxCheck(object data, Types dataType, int size, double min, double max, double defaultValue, out object resultData)
         {
             if (data == null)
             {
                 resultData = null;
                 return false;
             }
-            if (dataType == Types.STRING ||
-                size > 1)
+            bool isNotConvertType = dataType == Types.String || dataType == Types.Bool || dataType == Types.DateTime || size > 1;
+            if (isNotConvertType)
             {
                 resultData = data;
                 return true;
@@ -940,51 +932,42 @@ namespace CSUtil
 
             try
             {
-                double chkData = Convert.ToDouble(data);
+                double chkData = Convert.ToDouble(data, CultureInfo.InvariantCulture);
                 chkData = chkData < min ? defaultValue : chkData;
                 chkData = chkData > max ? defaultValue : chkData;
 
                 switch (dataType)
                 {
-                    case Types.BOOL:
-                        resultData = Convert.ToBoolean(chkData);
-                        break;
-                    case Types.BIT:
-                    case Types.BYTE:
+                    case Types.Bit:
+                    case Types.UInt8:
                         resultData = Convert.ToByte(chkData);
                         break;
-                    case Types.SBYTE:
+                    case Types.Int8:
                         resultData = Convert.ToSByte(chkData);
                         break;
-                    case Types.CHAR:
-                        resultData = Convert.ToChar(chkData);
-                        break;
-                    case Types.SHORT:
+                    case Types.Int16:
                         resultData = Convert.ToInt16(chkData);
                         break;
-                    case Types.USHORT:
+                    case Types.UInt16:
                         resultData = Convert.ToUInt16(chkData);
                         break;
-                    case Types.INT:
+                    case Types.Int32:
                         resultData = Convert.ToInt32(chkData);
                         break;
-                    case Types.UINT:
+                    case Types.UInt32:
                         resultData = Convert.ToUInt32(chkData);
                         break;
-                    case Types.LONG:
+                    case Types.Int64:
                         resultData = Convert.ToInt64(chkData);
                         break;
-                    case Types.ULONG:
+                    case Types.UInt64:
                         resultData = Convert.ToUInt64(chkData);
                         break;
-                    case Types.FLOAT:
+                    case Types.Float:
                         resultData = Convert.ToSingle(chkData);
                         break;
-                    case Types.DOUBLE:
+                    case Types.Double:
                         resultData = chkData;
-                        break;
-                    case Types.DATETIME:
-                        resultData = Convert.ToDateTime(chkData);
                         break;
                     default:
                         resultData = null;
@@ -992,13 +975,10 @@ namespace CSUtil
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 resultData = null;
                 result = false;
-#if DEBUG
-                Debug.WriteLine($"DataMinMaxCheck: {ex}");
-#endif
             }
 
             return result;
@@ -1024,15 +1004,15 @@ namespace CSUtil
         /// true: 실행 성공 <br/>
         /// false: 실행 실패 (data == null, Type Convert 실패)
         /// </returns>
-        public static bool DataMinMaxCheck(object data, string dataType, int size, double min, double max, double defaultValue, out object? resultData)
+        public static bool DataMinMaxCheck(object data, string dataType, int size, double min, double max, double defaultValue, out object resultData)
         {
-            if (!DefinedData.TryGetValue(dataType, out DataTypeCls dataTypeCls))
+            if (!Enum.TryParse(dataType, out Types type))
             {
                 resultData = null;
                 return false;
             }
 
-            return DataMinMaxCheck(data, dataTypeCls.Type, size, min, max, defaultValue, out resultData);
+            return DataMinMaxCheck(data, type, size, min, max, defaultValue, out resultData);
         }
 
         /// <summary>
@@ -1043,7 +1023,7 @@ namespace CSUtil
         /// <param name="size">데이터의 개수(1보다 클 경우 배열로 인식)</param>
         /// <param name="multiply">데이터에 곱할 값</param>
         /// <returns>곱해진 데이터</returns>
-        public static object? ObjectMultiply(object data, Types dataType, int size, double multiply)
+        public static object ObjectMultiply(object data, Types dataType, int size, double multiply)
         {
             if (data == null)
             {
@@ -1054,175 +1034,151 @@ namespace CSUtil
 
             switch (dataType)
             {
-                case Types.BYTE:
+                case Types.Int16:
                     {
                         if (size > 1)
                         {
-                            byte[] datas = (byte[])data;
+                            object[] convDatas = (object[])data;
+                            short[] datas = new short[convDatas.Length];
                             for (int i = 0; i < datas.Length; ++i)
                             {
-                                datas[i] = Convert.ToByte(datas[i] * multiply);
+                                datas[i] = DoubleToShort(Convert.ToInt16(convDatas[i], CultureInfo.InvariantCulture) * multiply);
                             }
                             result = datas;
                         }
                         else
                         {
-                            result = Convert.ToByte((byte)data * multiply);
+                            result = DoubleToShort(Convert.ToInt16(data, CultureInfo.InvariantCulture) * multiply);
                         }
                     }
                     break;
-                case Types.SBYTE:
+                case Types.UInt16:
                     {
                         if (size > 1)
                         {
-                            sbyte[] datas = (sbyte[])data;
+                            object[] convDatas = (object[])data;
+                            ushort[] datas = new ushort[convDatas.Length];
                             for (int i = 0; i < datas.Length; ++i)
                             {
-                                datas[i] = DoubleToSByte(datas[i] * multiply);
+                                datas[i] = DoubleToUShort(Convert.ToUInt16(convDatas[i], CultureInfo.InvariantCulture) * multiply);
                             }
                             result = datas;
                         }
                         else
                         {
-                            result = DoubleToSByte((sbyte)data * multiply);
+                            result = DoubleToUShort(Convert.ToUInt16(data, CultureInfo.InvariantCulture) * multiply);
                         }
                     }
                     break;
-                case Types.SHORT:
+                case Types.Int32:
                     {
                         if (size > 1)
                         {
-                            short[] datas = (short[])data;
+                            object[] convDatas = (object[])data;
+                            int[] datas = new int[convDatas.Length];
                             for (int i = 0; i < datas.Length; ++i)
                             {
-                                datas[i] = DoubleToShort(datas[i] * multiply);
+                                datas[i] = DoubleToInt(Convert.ToInt32(convDatas[i], CultureInfo.InvariantCulture) * multiply);
                             }
                             result = datas;
                         }
                         else
                         {
-                            result = DoubleToShort((short)data * multiply);
+                            result = DoubleToInt(Convert.ToInt32(data, CultureInfo.InvariantCulture) * multiply);
                         }
                     }
                     break;
-                case Types.USHORT:
+                case Types.UInt32:
                     {
                         if (size > 1)
                         {
-                            ushort[] datas = (ushort[])data;
+                            object[] convDatas = (object[])data;
+                            uint[] datas = new uint[convDatas.Length];
                             for (int i = 0; i < datas.Length; ++i)
                             {
-                                datas[i] = DoubleToUShort(datas[i] * multiply);
+                                datas[i] = DoubleToUInt(Convert.ToUInt32(convDatas[i], CultureInfo.InvariantCulture) * multiply);
                             }
                             result = datas;
                         }
                         else
                         {
-                            result = DoubleToUShort((ushort)data * multiply);
+                            result = DoubleToUInt(Convert.ToUInt32(data, CultureInfo.InvariantCulture) * multiply);
                         }
                     }
                     break;
-                case Types.INT:
+                case Types.Int64:
                     {
                         if (size > 1)
                         {
-                            int[] datas = (int[])data;
+                            object[] convDatas = (object[])data;
+                            long[] datas = new long[convDatas.Length];
                             for (int i = 0; i < datas.Length; ++i)
                             {
-                                datas[i] = DoubleToInt(datas[i] * multiply);
+                                datas[i] = DoubleToLong(Convert.ToInt64(convDatas[i], CultureInfo.InvariantCulture) * multiply);
                             }
                             result = datas;
                         }
                         else
                         {
-                            result = DoubleToInt((int)data * multiply);
+                            result = DoubleToLong(Convert.ToInt64(data, CultureInfo.InvariantCulture) * multiply);
                         }
                     }
                     break;
-                case Types.UINT:
+                case Types.UInt64:
                     {
                         if (size > 1)
                         {
-                            uint[] datas = (uint[])data;
+                            object[] convDatas = (object[])data;
+                            ulong[] datas = new ulong[convDatas.Length];
                             for (int i = 0; i < datas.Length; ++i)
                             {
-                                datas[i] = DoubleToUInt(datas[i] * multiply);
+                                datas[i] = DoubleToULong(Convert.ToUInt64(convDatas[i], CultureInfo.InvariantCulture) * multiply);
                             }
                             result = datas;
                         }
                         else
                         {
-                            result = DoubleToUInt((uint)data * multiply);
+                            result = DoubleToULong(Convert.ToUInt64(data, CultureInfo.InvariantCulture) * multiply);
                         }
                     }
                     break;
-                case Types.LONG:
+                case Types.Float:
                     {
                         if (size > 1)
                         {
-                            long[] datas = (long[])data;
+                            object[] convDatas = (object[])data;
+                            float[] datas = new float[convDatas.Length];
                             for (int i = 0; i < datas.Length; ++i)
                             {
-                                datas[i] = DoubleToLong(datas[i] * multiply);
+                                datas[i] = DoubleToFloat(Convert.ToSingle(convDatas[i], CultureInfo.InvariantCulture) * multiply);
                             }
                             result = datas;
                         }
                         else
                         {
-                            result = DoubleToLong((long)data * multiply);
+                            result = DoubleToFloat(Convert.ToSingle(data, CultureInfo.InvariantCulture) * multiply);
                         }
                     }
                     break;
-                case Types.ULONG:
+                case Types.Double:
                     {
                         if (size > 1)
                         {
-                            ulong[] datas = (ulong[])data;
+                            object[] convDatas = (object[])data;
+                            double[] datas = new double[convDatas.Length];
                             for (int i = 0; i < datas.Length; ++i)
                             {
-                                datas[i] = DoubleToULong(datas[i] * multiply);
+                                datas[i] = Convert.ToDouble(convDatas[i], CultureInfo.InvariantCulture) * multiply;
                             }
                             result = datas;
                         }
                         else
                         {
-                            result = DoubleToULong((ulong)data * multiply);
+                            result = Convert.ToDouble(data, CultureInfo.InvariantCulture) * multiply;
                         }
                     }
                     break;
-                case Types.FLOAT:
-                    {
-                        if (size > 1)
-                        {
-                            float[] datas = (float[])data;
-                            for (int i = 0; i < datas.Length; ++i)
-                            {
-                                datas[i] = DoubleToFloat(datas[i] * multiply);
-                            }
-                            result = datas;
-                        }
-                        else
-                        {
-                            result = DoubleToFloat((float)data * multiply);
-                        }
-                    }
-                    break;
-                case Types.DOUBLE:
-                    {
-                        if (size > 1)
-                        {
-                            double[] datas = (double[])data;
-                            for (int i = 0; i < datas.Length; ++i)
-                            {
-                                datas[i] = datas[i] * multiply;
-                            }
-                            result = datas;
-                        }
-                        else
-                        {
-                            result = (double)data * multiply;
-                        }
-                    }
+                default:
                     break;
             }
 

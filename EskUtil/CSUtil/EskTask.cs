@@ -1,13 +1,14 @@
 ﻿// ======================================================================================================
 // File Name        : EskTask.cs
 // Project          : CSUtil
-// Last Update      : 2024.09.16 - yc.jeon
+// Last Update      : 2025.05.19 - yc.jeon
 // ======================================================================================================
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CSUtil
@@ -131,7 +132,7 @@ namespace CSUtil
         /// <param name="action">Task 수행 Action (이때 object 타입은 KairosTaskData)</param>
         /// <param name="state"><paramref name="action"/>에 넘겨줄 데이터 (이 데이터는 KairosTaskData.Data에 들어감)</param>
         /// <param name="isStart">생성과 동시에 Start 할 지 유무</param>
-        public EskTask(string name, Action<object?> action, object? state, bool isStart = false)
+        public EskTask(string name, Action<object> action, object state, bool isStart = false)
         {
             Name = name;
             _cancelToken = new CancellationTokenSource();
@@ -152,7 +153,7 @@ namespace CSUtil
         /// <param name="state"><paramref name="action"/>에 넘겨줄 데이터 (이 데이터는 KairosTaskData.Data에 들어감)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <param name="isStart">생성과 동시에 Start 할 지 유무</param>
-        public EskTask(string name, Action<object?> action, object? state, CancellationTokenSource cancellationToken, bool isStart = false)
+        public EskTask(string name, Action<object> action, object state, CancellationTokenSource cancellationToken, bool isStart = false)
         {
             Name = name;
             _cancelToken = cancellationToken;
@@ -172,7 +173,7 @@ namespace CSUtil
         /// <param name="state"><paramref name="action"/>에 넘겨줄 데이터 (이 데이터는 KairosTaskData.Data에 들어감)</param>
         /// <param name="options">Task 생성 옵션값</param>
         /// <param name="isStart">생성과 동시에 Start 할 지 유무</param>
-        public EskTask(string name, Action<object?> action, object? state, TaskCreationOptions options, bool isStart = false)
+        public EskTask(string name, Action<object> action, object state, TaskCreationOptions options, bool isStart = false)
         {
             Name = name;
             _cancelToken = new CancellationTokenSource();
@@ -194,7 +195,7 @@ namespace CSUtil
         /// <param name="options">Task 생성 옵션값</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <param name="isStart">생성과 동시에 Start 할 지 유무</param>
-        public EskTask(string name, Action<object?> action, object? state, TaskCreationOptions options, CancellationTokenSource cancellationToken, bool isStart = false)
+        public EskTask(string name, Action<object> action, object state, TaskCreationOptions options, CancellationTokenSource cancellationToken, bool isStart = false)
         {
             Name = name;
             _cancelToken = cancellationToken;
@@ -307,7 +308,7 @@ namespace CSUtil
         /// <summary>
         /// EskTask로 넘겨줄 데이터
         /// </summary>
-        public object? Data { get; }
+        public object Data { get; }
         /// <summary>
         /// Task 종료 플래그
         /// </summary>
@@ -322,7 +323,7 @@ namespace CSUtil
         /// </summary>
         /// <param name="data">데이터</param>
         /// <param name="cancelToken">Task CancellationTokenSource</param>
-        public EskTaskData(object? data, CancellationTokenSource cancelToken)
+        public EskTaskData(object data, CancellationTokenSource cancelToken)
         {
             Data = data;
             _cancelToken = cancelToken;

@@ -1,14 +1,16 @@
 ﻿// ======================================================================================================
 // File Name        : LogCleaner.cs
 // Project          : CSUtil
-// Last Update      : 2024.09.16 - yc.jeon
+// Last Update      : 2025.05.19 - yc.jeon
 // ======================================================================================================
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -22,7 +24,7 @@ namespace CSUtil
         /// <summary>
         /// Log File을 제거했을 때 호출하는 이벤트
         /// </summary>
-        public EventHandler<DeleteEventArgs>? DeleteEvent { get; set; }
+        public EventHandler<DeleteEventArgs> DeleteEvent { get; set; }
 
         /// <summary>
         /// Log Cleaner의 옵션 데이터
@@ -43,7 +45,7 @@ namespace CSUtil
         /// <summary>
         /// Cleaner 동작 Task
         /// </summary>
-        private EskTask? _cleanTask;
+        private EskTask _cleanTask;
         /// <summary>
         /// Log Cleaner 객체 Dispose 유무
         /// </summary>
@@ -53,7 +55,7 @@ namespace CSUtil
         /// 생성자
         /// </summary>
         /// <param name="option">Log Cleaner 옵션 데이터</param>
-        public LogCleaner(LogCleanerOption? option = null)
+        public LogCleaner(LogCleanerOption option = null)
         {
             if (option != null)
             {
@@ -194,9 +196,9 @@ namespace CSUtil
         /// Cleaner 동작 Task 함수
         /// </summary>
         /// <param name="state"></param>
-        private void CleanTask(object? state)
+        private void CleanTask(object state)
         {
-            if (state is not EskTaskData taskData)
+            if (!(state is EskTaskData taskData))
             {
                 return;
             }
@@ -520,9 +522,9 @@ namespace CSUtil
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
-            if (obj is not LogCleanerOption option)
+            if (!(obj is LogCleanerOption option))
             {
                 return false;
             }

@@ -1,73 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ByteUtil">
-      <UniqueIdentifier>{8a1c4ed0-593c-4663-9eb5-e63e5f9de16e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BitUtil">
-      <UniqueIdentifier>{e1717c43-67ad-4455-9d05-436110225b74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CalculateUtil">
-      <UniqueIdentifier>{672ecb1d-28d2-4725-b52f-3ac0a9b97675}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="INIUtil">
-      <UniqueIdentifier>{1bad96d8-cacc-46df-94b1-6327f86aa522}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ConvertUtil">
-      <UniqueIdentifier>{831d98d8-6a90-4688-bc8e-b8dd6a887fe8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PointerUtil">
-      <UniqueIdentifier>{61ec1bdc-4f39-4618-ab17-707dcf1b4882}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="StringUtil">
-      <UniqueIdentifier>{71295722-f3bc-439f-9849-0321b1ff150b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SwapUtil">
-      <UniqueIdentifier>{afa99e6f-2642-49f9-9c9d-df073bc5a88a}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ByteUtil.h">
-      <Filter>ByteUtil</Filter>
-    </ClInclude>
-    <ClInclude Include="IniUtil.h">
-      <Filter>INIUtil</Filter>
-    </ClInclude>
-    <ClInclude Include="CalcUtil.h">
-      <Filter>CalculateUtil</Filter>
-    </ClInclude>
-    <ClInclude Include="PointerUtil.h">
-      <Filter>PointerUtil</Filter>
-    </ClInclude>
-    <ClInclude Include="StringUtil.h">
-      <Filter>StringUtil</Filter>
-    </ClInclude>
-    <ClInclude Include="SwapUtil.h">
-      <Filter>SwapUtil</Filter>
-    </ClInclude>
-    <ClInclude Include="BitUtil.h">
-      <Filter>BitUtil</Filter>
-    </ClInclude>
-    <ClInclude Include="ConvertUtil.h">
-      <Filter>ConvertUtil</Filter>
-    </ClInclude>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="BitUtil.h" />
+    <ClInclude Include="ByteUtil.h" />
+    <ClInclude Include="CalcUtil.h" />
+    <ClInclude Include="IniUtil.h" />
+    <ClInclude Include="PointerUtil.h" />
+    <ClInclude Include="StringUtil.h" />
+    <ClInclude Include="SwapUtil.h" />
+    <ClInclude Include="ConvertUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ByteUtil.cpp">
-      <Filter>ByteUtil</Filter>
-    </ClCompile>
-    <ClCompile Include="IniUtil.cpp">
-      <Filter>INIUtil</Filter>
-    </ClCompile>
-    <ClCompile Include="ConvertUtil.cpp">
-      <Filter>ConvertUtil</Filter>
-    </ClCompile>
-    <ClCompile Include="BitUtil.cpp">
-      <Filter>BitUtil</Filter>
-    </ClCompile>
-    <ClCompile Include="CalcUtil.cpp">
-      <Filter>CalculateUtil</Filter>
-    </ClCompile>
+    <ClCompile Include="ConvertUtil.cpp" />
   </ItemGroup>
 </Project>

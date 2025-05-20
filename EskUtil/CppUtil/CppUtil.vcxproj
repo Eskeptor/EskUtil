@@ -168,11 +168,7 @@
     <ClInclude Include="SwapUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BitUtil.cpp" />
-    <ClCompile Include="ByteUtil.cpp" />
-    <ClCompile Include="CalcUtil.cpp" />
     <ClCompile Include="ConvertUtil.cpp" />
-    <ClCompile Include="IniUtil.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -249,3 +249,9 @@ dotnet_diagnostic.CA1720.severity = none
 
 # CA1707: 식별자에는 밑줄을 사용할 수 없습니다.
 dotnet_diagnostic.CA1707.severity = none
+
+# CA1510: ArgumentNullException throw 도우미 사용
+dotnet_diagnostic.CA1510.severity = none
+
+# CA1512: ArgumentOutOfRangeException throw 도우미 사용
+dotnet_diagnostic.CA1512.severity = none

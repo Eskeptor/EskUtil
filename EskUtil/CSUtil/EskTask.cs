@@ -1,13 +1,11 @@
 ﻿// ======================================================================================================
 // File Name        : EskTask.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.19 - yc.jeon
+// Last Update      : 2025.05.20 - yc.jeon
 // ======================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +23,7 @@ namespace CSUtil
         /// <summary>
         /// Task Cancel 유무
         /// </summary>
-        public bool IsCancel { get { return _cancelToken.Token.IsCancellationRequested; } }
+        public bool IsCancel { get => _cancelToken.Token.IsCancellationRequested; }
         /// <summary>
         /// Task 이름
         /// </summary>
@@ -33,7 +31,8 @@ namespace CSUtil
         /// <summary>
         /// 객체 Dispose 유무
         /// </summary>
-        protected bool IsDisposed { get; private set; }
+        protected bool IsDisposed { get => _isDisposed; }
+        private bool _isDisposed;
         /// <summary>
         /// Task의 CancellationTokenSource
         /// </summary>
@@ -75,6 +74,10 @@ namespace CSUtil
         /// <param name="isStart">생성과 동시에 Start 할 지 유무</param>
         public EskTask(string name, Action action, CancellationTokenSource cancellationToken, bool isStart = false)
         {
+            if (cancellationToken == null)
+            {
+                throw new ArgumentNullException(nameof(cancellationToken));
+            }
             Name = name;
             _cancelToken = cancellationToken;
             _isStarted = isStart;
@@ -115,6 +118,10 @@ namespace CSUtil
         /// <param name="isStart">생성과 동시에 Start 할 지 유무</param>
         public EskTask(string name, Action action, TaskCreationOptions options, CancellationTokenSource cancellationToken, bool isStart = false)
         {
+            if (cancellationToken == null)
+            {
+                throw new ArgumentNullException(nameof(cancellationToken));
+            }
             Name = name;
             _cancelToken = cancellationToken;
             _isStarted = isStart;
@@ -155,6 +162,10 @@ namespace CSUtil
         /// <param name="isStart">생성과 동시에 Start 할 지 유무</param>
         public EskTask(string name, Action<object> action, object state, CancellationTokenSource cancellationToken, bool isStart = false)
         {
+            if (cancellationToken == null)
+            {
+                throw new ArgumentNullException(nameof(cancellationToken));
+            }
             Name = name;
             _cancelToken = cancellationToken;
             _isStarted = isStart;
@@ -197,6 +208,10 @@ namespace CSUtil
         /// <param name="isStart">생성과 동시에 Start 할 지 유무</param>
         public EskTask(string name, Action<object> action, object state, TaskCreationOptions options, CancellationTokenSource cancellationToken, bool isStart = false)
         {
+            if (cancellationToken == null)
+            {
+                throw new ArgumentNullException(nameof(cancellationToken));
+            }
             Name = name;
             _cancelToken = cancellationToken;
             _isStarted = isStart;
@@ -246,7 +261,7 @@ namespace CSUtil
                 }
             }
 
-            IsDisposed = true;
+            _isDisposed = true;
         }
 
         /// <summary>
@@ -279,7 +294,14 @@ namespace CSUtil
                     return;
                 }
 
-                RunTask.Wait();
+                try
+                {
+                    RunTask.Wait();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
 
             _isStarted = false;
@@ -312,7 +334,7 @@ namespace CSUtil
         /// <summary>
         /// Task 종료 플래그
         /// </summary>
-        public bool IsCanceled { get { return _cancelToken.Token.IsCancellationRequested; } }
+        public bool IsCanceled { get => _cancelToken.Token.IsCancellationRequested; }
         /// <summary>
         /// Task CancellationTokenSource
         /// </summary>

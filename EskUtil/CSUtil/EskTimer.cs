@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : EskTimer.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.20 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// Custom 사용할 정밀 타이머 (Win32 API 사용) 
@@ -96,7 +96,7 @@ namespace CSUtil
         /// <summary>
         /// 타이머가 실행될 때 주기적으로 호출할 이벤트
         /// </summary>
-        public event EventHandler Elapsed;
+        public event EventHandler<ElapseEventArgs> Elapsed;
         /// <summary>
         /// Timer가 Start한 시간 <br/>
         /// (Start하지 않았거나 Stop한 경우 DateTime.MinValue)
@@ -125,12 +125,26 @@ namespace CSUtil
         /// Timer Lock
         /// </summary>
         private object Locker { get; } = new object();
+        /// <summary>
+        /// UI에서 사용하는지 유무
+        /// </summary>
+        private bool UseUIContext { get; }
+        /// <summary>
+        /// Elapse 이벤트가 발생했을 때 전달할 데이터
+        /// </summary>
+        private object ElapseData { get; }
+        /// <summary>
+        /// 콜백 재진입 방지용 변수 (타이머 콜백이 실행되는 동안 다시 콜백이 실행되지 않도록 하기 위한 변수) <br/>
+        /// </summary>
+        private int _syncPoint;
 
         /// <summary>
         /// 생성자
         /// </summary>
-        public EskTimer()
-            : this(10, 2)
+        /// <param name="useUIConext">UI에서 사용하는지 유무</param>
+        /// <param name="elapseData">Elapse 이벤트가 발생했을 때 전달할 데이터</param>
+        public EskTimer(bool useUIConext, object elapseData = null)
+            : this(10, 2, useUIConext, elapseData)
         {
 
         }
@@ -138,8 +152,10 @@ namespace CSUtil
         /// 생성자
         /// </summary>
         /// <param name="interval">타이머 주기 (msec)</param>
-        public EskTimer(int interval)
-            : this(interval, interval / 10)
+        /// <param name="useUIConext">UI에서 사용하는지 유무</param>
+        /// <param name="elapseData">Elapse 이벤트가 발생했을 때 전달할 데이터</param>
+        public EskTimer(int interval, bool useUIConext, object elapseData = null)
+            : this(interval, interval / 10, useUIConext, elapseData)
         {
 
         }
@@ -148,17 +164,16 @@ namespace CSUtil
         /// </summary>
         /// <param name="interval">타이머의 주기 (msec)</param>
         /// <param name="resolution">타이머의 해상도 (msec) <br/>(항상 <paramref name="interval"/>보다 작아야 함)</param>
-        public EskTimer(int interval, int resolution)
+        /// <param name="useUIConext">UI에서 사용하는지 유무</param>
+        /// <param name="elapseData">Elapse 이벤트가 발생했을 때 전달할 데이터</param>
+        public EskTimer(int interval, int resolution, bool useUIConext, object elapseData = null)
         {
             Resolution = resolution;
             Interval = interval;
+            UseUIContext = useUIConext;
+            ElapseData = elapseData;
             Callback = new WinAPI.TimerCallback(TimerCallbackMethod);
-
             SyncContext = SynchronizationContext.Current;
-            if (SyncContext == null)
-            {
-                SyncContext = new SynchronizationContext();
-            }
         }
         /// <summary>
         /// 소멸자
@@ -260,19 +275,54 @@ namespace CSUtil
         /// <param name="rsv2"></param>
         private void TimerCallbackMethod(uint id, uint msg, ref uint userCtx, uint rsv1, uint rsv2)
         {
-            EventHandler handler = Elapsed;
-            if (handler == null)
+            // 이전 작업이 안 끝났으면 이번 틱은 무시 (Drop frame 전략)
+            if (Interlocked.CompareExchange(ref _syncPoint, 1, 0) != 0)
             {
                 return;
             }
-            SyncContext.Post(_ =>
+
+            try
             {
-                try
+                EventHandler<ElapseEventArgs> handler = Elapsed;
+                if (handler == null)
                 {
-                    handler.Invoke(this, EventArgs.Empty);
+                    return;
                 }
-                catch { }
-            }, null);
+
+                SynchronizationContext ctx = SyncContext;
+                if (UseUIContext)
+                {
+                    if (ctx == null ||
+                        ctx.GetType() == typeof(SynchronizationContext))
+                    {
+                        handler.Invoke(this, new ElapseEventArgs() { Data = ElapseData });
+                    }
+                    else
+                    {
+                        ctx.Post(_ =>
+                        {
+                            try { handler.Invoke(this, new ElapseEventArgs() { Data = ElapseData }); }
+                            catch { }
+                        }, null);
+                    }
+                }
+                else
+                {
+                    handler.Invoke(this, new ElapseEventArgs() { Data = ElapseData });
+                }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _syncPoint, 0);
+            }
         }
+    }
+
+    public class ElapseEventArgs : EventArgs
+    {
+        /// <summary>
+        /// 데이터
+        /// </summary>
+        public object Data { get; set; }
     }
 }

@@ -1,12 +1,15 @@
 ﻿// ======================================================================================================
 // File Name        : CalcUtil.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.19 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// 계산 관련 유틸리티
@@ -422,7 +425,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static short GetLinear(short inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static short GetLinear(
+            short inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd)
         {
             short result;
             try
@@ -445,7 +453,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static ushort GetLinear(ushort inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static ushort GetLinear(
+            ushort inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd)
         {
             ushort result;
             try
@@ -468,7 +481,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static int GetLinear(int inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static int GetLinear(
+            int inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd)
         {
             int result;
             try
@@ -491,7 +509,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static uint GetLinear(uint inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static uint GetLinear(
+            uint inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd)
         {
             uint result;
             try
@@ -514,7 +537,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static long GetLinear(long inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static long GetLinear(
+            long inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd)
         {
             long result;
             try
@@ -537,7 +565,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static ulong GetLinear(ulong inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static ulong GetLinear(
+            ulong inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd)
         {
             ulong result;
             try
@@ -560,7 +593,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static float GetLinear(float inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static float GetLinear(
+            float inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd)
         {
             float result;
             try
@@ -584,7 +622,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static double GetLinear(double inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static double GetLinear(
+            double inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd)
         {
             if (inputValue > inputEnd)
             {
@@ -610,7 +653,12 @@ namespace CSUtil
         /// <param name="outputStart">출력 값의 시작 범위</param>
         /// <param name="outputEnd">출력 값의 끝 범위</param>
         /// <returns>변환된 출력 값</returns>
-        public static object GetLinear(object inputValue, double inputStart, double inputEnd, double outputStart, double outputEnd)
+        public static object GetLinear(
+            object inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart, 
+            double outputEnd)
         {
             switch (inputValue)
             {
@@ -633,6 +681,63 @@ namespace CSUtil
                 default:
                     return null;
             }
+        }
+
+        /// <summary>
+        /// 데이터 집단에서 표준편차를 구하는 함수
+        /// </summary>
+        /// <param name="datas">표준편차를 구할 데이터 집단</param>
+        /// <returns>표준편차</returns>
+        /// <remarks>[MOD][2026.03.16 - yc.jeon] Welford 알고리즘으로 변경</remarks>
+        public static double GetStandardDeviation(IEnumerable<double> datas)
+        {
+            if (datas == null)
+            {
+                return 0.0;
+            }
+
+            int count = 0;
+            double mean = 0.0;
+            double m2 = 0.0;
+
+            foreach (double data in datas)
+            {
+                ++count;
+                double delta = data - mean;
+                mean += delta / count;
+                double delta2 = data - mean;
+                m2 += delta * delta2;
+            }
+
+            // 데이터가 1개 이하인 경우 표준편차는 0
+            if (count < 2)
+            {
+                return 0.0;
+            }
+
+            // 표본표준편차 (Sample Standard Deviation) 연산
+            double variance = m2 / (count - 1);
+            // 만약의 부동소수점 오차로 인한 음수 발생을 완벽 차단
+            if (variance < 0.0)
+            {
+                variance = 0.0;
+            }
+            return Math.Sqrt(variance);
+        }
+
+        /// <summary>
+        /// Stopwatch Ticks를 이용하여 경과된 시간을 밀리초 단위로 계산하는 함수
+        /// </summary>
+        /// <param name="startTicks">시작 Ticks</param>
+        /// <param name="endTicks">종료 Ticks</param>
+        /// <returns>Msec으로 변환된 값</returns>
+        /// <remarks>
+        /// [NEW][2025.12.18 - yc.jeon] <br/>
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long CalcElapseMsec(long startTicks, long endTicks)
+        {
+            return (endTicks - startTicks) * 1000 / Stopwatch.Frequency;
         }
     }
 }

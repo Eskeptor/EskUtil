@@ -1,15 +1,15 @@
 ﻿/**
-* @file			SwapUtil.h
-* @author		yc.jeon
-* @date			2025-05-20
-* @version		0.0.2
+* @file			Swap.h
+* @author		yc.jeon (Eskeptor)
+* @date			2026-04-21
+* @version		0.0.3
 * @brief		Swap Utility
 */
 
 #pragma once
 #include "Common.h"
 
-namespace esk::util_swap
+namespace esk::gearforge::util::swap
 {
     /**
     * @brief        두 데이터를 서로 바꾸는 함수

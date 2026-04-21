@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : Log4netUtil.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.19 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -15,7 +15,7 @@ using System.Threading;
 using log4net.Appender;
 using log4net.Layout;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// log4net용 유틸리티

@@ -1,14 +1,14 @@
 ﻿// ======================================================================================================
 // File Name        : RingArray.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.20 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     public class RingArray<T>
     {

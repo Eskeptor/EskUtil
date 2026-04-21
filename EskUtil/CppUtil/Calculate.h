@@ -1,8 +1,8 @@
 ﻿/**
-* @file			CalcUtil.h
-* @author		yc.jeon
-* @date			2025-05-20
-* @version		0.0.2
+* @file			Calculate.h
+* @author		yc.jeon (Eskeptor)
+* @date			2026-04-21
+* @version		0.0.3
 * @brief		Calculate Utility
 */
 
@@ -12,14 +12,14 @@
 #include <cmath>
 #include <limits>
 
-namespace esk::util_calc
+namespace esk::gearforge::util::calc
 {
     /**
     * @brief        10으로 나누는 함수
     * @param[in]    nDiv            10으로 나눌 데이터
     * @return       10으로 나눈 결과값 (정수)
     */
-    inline int32_t Div10(IN const int32_t& nDiv) noexcept
+    inline int32_t Div10(int32_t nDiv) noexcept
     {
         int64_t nDivisor = 0x1999999A;    // 10의 역수
         int32_t nResult = static_cast<int32_t>(((nDivisor * nDiv) >> 32));
@@ -31,7 +31,7 @@ namespace esk::util_calc
     * @param[in]    nDiv            100으로 나눌 데이터
     * @return       100으로 나눈 결과값 (정수)
     */
-    inline int32_t Div100(IN const int32_t& nDiv) noexcept
+    inline int32_t Div100(int32_t nDiv) noexcept
     {
         int64_t nDivisor = 0x028F5C29;    // 100의 역수
         int32_t nResult = static_cast<int32_t>(((nDivisor * nDiv) >> 32));
@@ -43,7 +43,7 @@ namespace esk::util_calc
     * @param[in]    nDiv            1000으로 나눌 데이터
     * @return       1000으로 나눈 결과값 (정수)
     */
-    inline int32_t Div1000(IN const int32_t& nDiv) noexcept
+    inline int32_t Div1000(int32_t nDiv) noexcept
     {
         int64_t nDivisor = 0x00418937;    // 1000의 역수
         int32_t nResult = static_cast<int32_t>(((nDivisor * nDiv) >> 32));
@@ -57,7 +57,7 @@ namespace esk::util_calc
     * @param[in]    dOffset         오차 범위 (값, 음수인 경우 양수로 치환함)
     * @return       true: 들어옴, false: 벗어남
     */
-    inline bool IsOffsetInValue(IN const double& dData, IN const double& dTarget, IN const double& dOffset) noexcept
+    inline bool IsOffsetInValue(double dData, double dTarget, double dOffset) noexcept
     {
         double dDiff = dOffset > 0.0 ? dOffset : -dOffset;
 
@@ -73,7 +73,7 @@ namespace esk::util_calc
     * @param[in]    dOffset         오차 범위 (퍼센트: 10% -> 10입력, 음수인 경우 양수로 치환함)
     * @return       true: 들어옴, false: 벗어남
     */
-    inline bool IsOffsetInPercent(IN const double& dData, IN const double& dTarget, IN const double& dOffsetPer) noexcept
+    inline bool IsOffsetInPercent(double dData, double dTarget, double dOffsetPer) noexcept
     {
         double dDiff = dTarget * (dOffsetPer >= 0 ? dOffsetPer * 0.01 : dOffsetPer * -0.01);
 
@@ -88,7 +88,7 @@ namespace esk::util_calc
     * @param[in]    dNum2           실수2
     * @return       true: 오차범위 내에서 같음, false: 오차범위 내에서 다름
     */
-    inline bool EpsEquals(IN const double& dNum1, IN const double& dNum2)
+    inline bool EpsEquals(double dNum1, double dNum2)
     {
         return std::abs(dNum1 - dNum2) < std::numeric_limits<double>::epsilon();
     }
@@ -98,7 +98,7 @@ namespace esk::util_calc
     * @param[in]    fNum2           실수2
     * @return       true: 오차범위 내에서 같음, false: 오차범위 내에서 다름
     */
-    inline bool EpsEquals(IN const float& fNum1, IN const float& fNum2)
+    inline bool EpsEquals(float fNum1, float fNum2)
     {
         return std::abs(fNum1 - fNum2) < std::numeric_limits<float>::epsilon();
     }

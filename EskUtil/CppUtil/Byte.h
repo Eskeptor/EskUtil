@@ -1,8 +1,8 @@
 ﻿/**
-* @file			ByteUtil.h
-* @author		yc.jeon
-* @date			2025-05-20
-* @version		0.0.2
+* @file			Byte.h
+* @author		yc.jeon (Eskeptor)
+* @date			2026-04-21
+* @version		0.0.3
 * @brief		Byte Utility
 */
 
@@ -10,7 +10,7 @@
 #include "Common.h"
 #include <Windows.h>
 
-namespace esk::util_byte
+namespace esk::gearforge::util::byte
 {
 #pragma pack(push, 1)
     /**

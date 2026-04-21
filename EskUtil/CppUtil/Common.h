@@ -1,3 +1,11 @@
+﻿/**
+* @file			Common.h
+* @author		yc.jeon (Eskeptor)
+* @date			2026-04-21
+* @version		0.0.3
+* @brief		Common Definitions
+*/
+
 #pragma once
 
 #ifdef ESK_DLL_EXPORTS

@@ -1,14 +1,14 @@
 ﻿// ======================================================================================================
 // File Name        : WinAPI.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.20 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// Windows API 함수

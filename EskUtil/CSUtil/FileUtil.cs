@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : FileUtil.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.19 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     public static class FileUtil
     {

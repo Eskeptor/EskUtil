@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : MemoryUtil.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.19 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// 메모리 관련 유틸리티

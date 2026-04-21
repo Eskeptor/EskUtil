@@ -1,15 +1,15 @@
 ﻿/**
-* @file			BitUtil.h
-* @author		yc.jeon
-* @date			2025-05-20
-* @version		0.0.2
+* @file			Bit.h
+* @author		yc.jeon (Eskeptor)
+* @date			2026-04-21
+* @version		0.0.3
 * @brief		Bit Utility
 */
 
 #pragma once
 #include "Common.h"
 
-namespace esk::util_bit
+namespace esk::gearforge::util::bit
 {
     /**
     * @brief        바이트의 특정 위치의 비트를 0으로 만드는 함수
@@ -17,7 +17,7 @@ namespace esk::util_bit
     * @param[in]    nLoc        0으로 만들 위치 (0~7)
     * @return       결과값(만약 nLoc이 7보다 크면 byData를 반환)
     */
-    inline uint8_t ClearBit(IN const uint8_t& byData, IN const int& nLoc) noexcept
+    inline uint8_t ClearBit(uint8_t byData, int nLoc) noexcept
     {
         if (nLoc > 7 ||
             nLoc < 0)
@@ -33,7 +33,7 @@ namespace esk::util_bit
     * @param[in]    nLoc        1로 만들 위치 (0~7)
     * @return       결과값(만약 nLoc이 7보다 크면 byData를 반환)
     */
-    inline uint8_t SetBit(IN const uint8_t& byData, IN const int& nLoc) noexcept
+    inline uint8_t SetBit(uint8_t byData, int nLoc) noexcept
     {
         if (nLoc > 7 ||
             nLoc < 0)
@@ -49,7 +49,7 @@ namespace esk::util_bit
     * @param[in]    nLoc        반전 할 위치 (0~7)
     * @return       결과값(만약 nLoc이 7보다 크면 byData를 반환)
     */
-    inline uint8_t InvertBit(IN const uint8_t& byData, IN const int& nLoc) noexcept
+    inline uint8_t InvertBit(uint8_t byData, int nLoc) noexcept
     {
         if (nLoc > 7 ||
             nLoc < 0)
@@ -65,7 +65,7 @@ namespace esk::util_bit
     * @param[in]    nLoc        반환 할 위치 (0~7)
     * @return       결과값(만약 nLoc이 7보다 크면 false 반환)
     */
-    inline bool CheckBit(IN const uint8_t& byData, IN const int& nLoc) noexcept
+    inline bool CheckBit(uint8_t byData, int nLoc) noexcept
     {
         return (nLoc <= 7 && nLoc >= 0) ? byData & (0x1 << nLoc) : false;
     }

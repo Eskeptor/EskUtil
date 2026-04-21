@@ -1,8 +1,8 @@
 ﻿/**
-* @file			IniUtil.h
-* @author		yc.jeon
-* @date			2025-05-20
-* @version		0.0.2
+* @file			Ini.h
+* @author		yc.jeon (Eskeptor)
+* @date			2026-04-21
+* @version		0.0.3
 * @brief		INI Utility
 */
 
@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <Windows.h>
 
-namespace esk::util_ini
+namespace esk::gearforge::util::ini
 {
     /**
     * @brief        INI 파일에서 데이터를 받아오는 함수
@@ -24,12 +24,12 @@ namespace esk::util_ini
     * @param[in]    szFileName      INI 파일의 경로 (전체 경로)
     * @return       읽어온 데이터의 길이 (읽어오지 못했다면 0)
     */
-    int GetIniString(IN const char* szSection,
-        IN const char* szKey,
-        IN const char* szDefault,
-        OUT char* szOutBuffer,
-        IN const int& nBufferSize,
-        IN const char* szFileName)
+    int GetIniString(const char* szSection,
+        const char* szKey,
+        const char* szDefault,
+        char* szOutBuffer,
+        const int& nBufferSize,
+        const char* szFileName)
     {
         const int MAX_LENGTH = 512;
         const char CHAR_LF = 0xA;

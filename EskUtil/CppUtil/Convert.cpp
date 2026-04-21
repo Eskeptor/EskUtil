@@ -1,18 +1,18 @@
-/**
-* @file			ConvertUtil.cpp
-* @author		yc.jeon
-* @date			2025-05-20
+﻿/**
+* @file			Convert.cpp
+* @author		yc.jeon (Eskeptor)
+* @date			2026-04-21
 * @version		0.0.2
 * @brief		Convert Utility
 */
 
-#include "ConvertUtil.h"
+#include "Convert.h"
 #include <sstream>
 
 #define MAX(X, Y)		((X) > (Y) ? (X) : (Y))
 #define MIN(X, Y)		((X) > (Y) ? (Y) : (X))
 
-namespace esk::util_conv
+namespace esk::gearforge::util::conv
 {
 	EXTERN EskUtil_API unsigned int HexToDec(const std::string & strHex)
 	{
@@ -20,7 +20,7 @@ namespace esk::util_conv
 		return nDec;
 	}
 
-	EXTERN EskUtil_API std::string DecToHex(const int& nDec)
+	EXTERN EskUtil_API std::string DecToHex(int nDec)
 	{
 		std::stringstream stream;
 		stream << std::hex << nDec;
@@ -28,7 +28,7 @@ namespace esk::util_conv
 		return strHex;
 	}
 
-	EXTERN EskUtil_API unsigned int RGBToHex(const int& nR, const int& nG, const int& nB)
+	EXTERN EskUtil_API unsigned int RGBToHex(int nR, int nG, int nB)
 	{
 		if (nR > 255 ||
 			nR < 0 ||
@@ -43,7 +43,7 @@ namespace esk::util_conv
 		return ((nR & 0xFF) << 16) + ((nG & 0xFF) << 8) + (nB & 0xFF);
 	}
 
-	EXTERN EskUtil_API unsigned int RGBAToHex(const int& nR, const int& nG, const int& nB, const int& nA)
+	EXTERN EskUtil_API unsigned int RGBAToHex(int nR, int nG, int nB, int nA)
 	{
 		if (nR > 255 ||
 			nR < 0 ||
@@ -57,7 +57,7 @@ namespace esk::util_conv
 
 		return ((nR & 0xFF) << 24) + ((nG & 0xFF) << 16) + ((nB & 0xFF) << 8) + (nA & 0xFF);
 	}
-	EXTERN EskUtil_API void HexToRGB(const int& nHex, int* nOutR, int* nOutG, int* nOutB)
+	EXTERN EskUtil_API void HexToRGB(int nHex, int* nOutR, int* nOutG, int* nOutB)
 	{
 		*nOutR = ((nHex >> 16) & 0xFF);
 		*nOutG = ((nHex >> 8) & 0xFF);
@@ -68,7 +68,7 @@ namespace esk::util_conv
 	//	int nHex = HexToDec(strHex);
 	//	HexToRGB(nHex, nOutR, nOutG, nOutB);
 	//}
-	EXTERN EskUtil_API void RGBToHSV(const int& nR, const int& nG, const int& nB, int* nOutH, int* nOutS, int* nOutV)
+	EXTERN EskUtil_API void RGBToHSV(int nR, int nG, int nB, int* nOutH, int* nOutS, int* nOutV)
 	{
 		if (nR > 255 ||
 			nR < 0 ||
@@ -125,7 +125,7 @@ namespace esk::util_conv
 			*nOutH = 360 + *nOutH;
 		}
 	}
-	EXTERN EskUtil_API void HexToHSV(const int& nHex, int* nOutH, int* nOutS, int* nOutV)
+	EXTERN EskUtil_API void HexToHSV(int nHex, int* nOutH, int* nOutS, int* nOutV)
 	{
 		int nR = 0;
 		int nG = 0;
@@ -133,7 +133,7 @@ namespace esk::util_conv
 		HexToRGB(nHex, &nR, &nG, &nB);
 		RGBToHSV(nR, nG, nB, nOutH, nOutS, nOutV);
 	}
-	EXTERN EskUtil_API void HSVToRGB(const int& nH, const int& nS, const int& nV, int* nOutR, int* nOutG, int* nOutB)
+	EXTERN EskUtil_API void HSVToRGB(int nH, int nS, int nV, int* nOutR, int* nOutG, int* nOutB)
 	{
 		if (nH > 360 ||
 			nH < 0 ||
@@ -191,7 +191,7 @@ namespace esk::util_conv
 				break;
 		}
 	}
-	EXTERN EskUtil_API unsigned int HSVToHex(const int& nH, const int& nS, const int& nV)
+	EXTERN EskUtil_API unsigned int HSVToHex(int nH, int nS, int nV)
 	{
 		if (nH > 360 ||
 			nH < 0 ||

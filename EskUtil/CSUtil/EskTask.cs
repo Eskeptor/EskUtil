@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : EskTask.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.20 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -9,13 +9,18 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// Custom Task (Task와 CancellationTokenSource를 같이 관리)
     /// </summary>
     public class EskTask : IDisposable
     {
+        /// <summary>
+        /// Wait 최대 시간 (ms)
+        /// </summary>
+        private const int MAX_WAIT_TIME_MS = 15000;
+
         /// <summary>
         /// Task 객체
         /// </summary>
@@ -269,6 +274,12 @@ namespace CSUtil
         /// </summary>
         public void Start()
         {
+            if (_isStarted ||
+                RunTask.Status != TaskStatus.Created)
+            {
+                return;
+            }
+
             _isStarted = true;
             RunTask.Start();
         }
@@ -296,7 +307,10 @@ namespace CSUtil
 
                 try
                 {
-                    RunTask.Wait();
+                    if (!RunTask.Wait(MAX_WAIT_TIME_MS))
+                    {
+                        Debug.WriteLine($"{Name} Task Stop Timed out after {MAX_WAIT_TIME_MS}ms.");
+                    }
                 }
                 catch (Exception ex)
                 {

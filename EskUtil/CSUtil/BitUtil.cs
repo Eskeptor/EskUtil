@@ -4,10 +4,10 @@
 // Last Update      : 2025.05.19 - yc.jeon
 // ======================================================================================================
 
-using System.Collections;
 using System;
+using System.Collections;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// Bit 관련 유틸리티

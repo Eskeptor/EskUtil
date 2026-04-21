@@ -2,16 +2,19 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Common.h" />
-    <ClInclude Include="BitUtil.h" />
-    <ClInclude Include="ByteUtil.h" />
-    <ClInclude Include="CalcUtil.h" />
-    <ClInclude Include="IniUtil.h" />
-    <ClInclude Include="PointerUtil.h" />
-    <ClInclude Include="StringUtil.h" />
-    <ClInclude Include="SwapUtil.h" />
-    <ClInclude Include="ConvertUtil.h" />
+    <ClInclude Include="Bit.h" />
+    <ClInclude Include="Byte.h" />
+    <ClInclude Include="Calculate.h" />
+    <ClInclude Include="Ini.h" />
+    <ClInclude Include="Pointer.h" />
+    <ClInclude Include="String.h" />
+    <ClInclude Include="Swap.h" />
+    <ClInclude Include="Convert.h" />
+    <ClInclude Include="Time.h" />
+    <ClInclude Include="File.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConvertUtil.cpp" />
+    <ClCompile Include="Convert.cpp" />
+    <ClCompile Include="File.cpp" />
   </ItemGroup>
 </Project>

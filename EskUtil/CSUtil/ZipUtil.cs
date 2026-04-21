@@ -1,12 +1,12 @@
 ﻿// ======================================================================================================
 // File Name        : ZipUtil.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.19 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System.IO;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// 압축 관련 유틸리티 (기본 zip)

@@ -74,12 +74,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Bin\CPP\</OutDir>
     <IntDir>$(SolutionDir)IMD\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)_$(LibrariesArchitecture)_d</TargetName>
+    <TargetName>Esk.GearForge.$(ProjectName)_$(LibrariesArchitecture)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IntDir>$(SolutionDir)IMD\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)Bin\CPP\</OutDir>
-    <TargetName>$(ProjectName)_$(LibrariesArchitecture)</TargetName>
+    <TargetName>Esk.GearForge.$(ProjectName)_$(LibrariesArchitecture)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>$(ProjectName)_$(LibrariesArchitecture)</TargetName>
@@ -130,7 +130,7 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;ESK_DLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -146,7 +146,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;ESK_DLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -157,18 +157,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BitUtil.h" />
-    <ClInclude Include="ByteUtil.h" />
-    <ClInclude Include="CalcUtil.h" />
+    <ClInclude Include="Bit.h" />
+    <ClInclude Include="Byte.h" />
+    <ClInclude Include="Calculate.h" />
     <ClInclude Include="Common.h" />
-    <ClInclude Include="ConvertUtil.h" />
-    <ClInclude Include="IniUtil.h" />
-    <ClInclude Include="PointerUtil.h" />
-    <ClInclude Include="StringUtil.h" />
-    <ClInclude Include="SwapUtil.h" />
+    <ClInclude Include="Convert.h" />
+    <ClInclude Include="File.h" />
+    <ClInclude Include="Ini.h" />
+    <ClInclude Include="Pointer.h" />
+    <ClInclude Include="String.h" />
+    <ClInclude Include="Swap.h" />
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConvertUtil.cpp" />
+    <ClCompile Include="Convert.cpp" />
+    <ClCompile Include="File.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

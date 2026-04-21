@@ -1,12 +1,12 @@
 ﻿// ======================================================================================================
 // File Name        : Exceptions.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.19 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     /// <summary>
     /// 올바르지 않은 Type으로 인한 예외

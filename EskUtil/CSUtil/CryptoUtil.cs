@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : CryptoUtil.cs
 // Project          : CSUtil
-// Last Update      : 2025.05.19 - yc.jeon
+// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -9,7 +9,7 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace CSUtil
+namespace Esk.GearForge.CSUtil
 {
     public static class CryptoUtil
     {
@@ -35,8 +35,8 @@ namespace CSUtil
                 aes.GenerateIV();
                 byte[] iv = aes.IV;
 
-                using (var memoryStream = new MemoryStream())
-                using (var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                using (MemoryStream memoryStream = new MemoryStream())
+                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
                 {
                     memoryStream.Write(iv, 0, iv.Length);
 
@@ -68,15 +68,15 @@ namespace CSUtil
                 aes.Key = DeriveKey();
 
                 byte[] iv = new byte[aes.BlockSize / 8];
-                Array.Copy(fullCipher, 0, iv, 0, iv.Length);
+                System.Array.Copy(fullCipher, 0, iv, 0, iv.Length);
                 aes.IV = iv;
 
                 int cipherStartIndex = iv.Length;
                 int cipherLength = fullCipher.Length - cipherStartIndex;
 
-                using (var memoryStream = new MemoryStream(fullCipher, cipherStartIndex, cipherLength))
-                using (var cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
-                using (var reader = new StreamReader(cryptoStream, Encoding.UTF8))
+                using (MemoryStream memoryStream = new MemoryStream(fullCipher, cipherStartIndex, cipherLength))
+                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                using (StreamReader reader = new StreamReader(cryptoStream, Encoding.UTF8))
                 {
                     decrypt = reader.ReadToEnd();
                 }

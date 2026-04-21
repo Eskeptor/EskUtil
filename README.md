@@ -1,38 +1,44 @@
-# EskUtil
+﻿# EskUtil
 It's a utility that I made for comfortable use.
 
-## C++ Utility (C++ 17)
+## C++ Utility (C++ 20)
 ```
  1) Bit Utility
  2) Byte Utility
  3) Calculate Utility
- 4) INI Utility
- 5) Convert Utility
- 6) Pointer Utility
- 7) String Utility
- 8) Swap Utility
+ 4) Convert Utility
+ 5) File Utility
+ 6) INI Utility
+ 7) Pointer Utility
+ 8) String Utility
+ 9) Swap Utility
+ 10) Time Utility
 ```
 
-## C# Utility (.NET 8)
+## C# Utility (.NET 9)
 ```
- 1) Bit Utility
- 2) Byte Utility
+ 1) Array Utility
+ 2) Bit Utility
  3) Calculate Utility
  4) Crypto Utility
- 5) Enum Utility
- 6) File Utility
- 7) Xml Utility
- 8) Zip Utility
- ETC01) Data Type
- ETC02) Extension
- ETC03) Log Manager for log4net
+ 5) Date Utility
+ 6) Enum Utility
+ 7) File Utility
+ 8) Image Utility
+ 9) Xml Utility
+ 10) Zip Utility
+ ETC01) Custom Task
+ ETC02) Custom Timer
+ ETC03) Extension
+ ETC04) Log Manager for log4net
+ ETC05) Win32 API Wrapper
 ```
 
 ## License
 ```
 MIT License
 
-Copyright (c) 2024 Jeon Ye-Chan (Eskeptor)
+Copyright (c) 2026 Jeon Ye-Chan (Eskeptor)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

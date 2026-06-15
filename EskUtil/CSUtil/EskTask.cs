@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : EskTask.cs
 // Project          : CSUtil
-// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
+// Last Update      : 2026.06.15 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -258,11 +258,13 @@ namespace Esk.GearForge.CSUtil
 
             if (disposing)
             {
-                Stop(true);
-                RunTask.Dispose();
-                if (_isTokenInternalCreated)
+                if (Stop(true))
                 {
-                    _cancelToken.Dispose();
+                    RunTask.Dispose();
+                    if (_isTokenInternalCreated)
+                    {
+                        _cancelToken.Dispose();
+                    }
                 }
             }
 
@@ -288,11 +290,11 @@ namespace Esk.GearForge.CSUtil
         /// Task Stop
         /// </summary>
         /// <param name="isWait">Stop 이후에 Task 수행이 끝날때 까지 기다릴지 유무</param>
-        public void Stop(bool isWait = false)
+        public bool Stop(bool isWait = false)
         {
             if (IsDisposed)
             {
-                return;
+                return true;
             }
 
             _cancelToken.Cancel();
@@ -302,7 +304,7 @@ namespace Esk.GearForge.CSUtil
             {
                 if (RunTask.IsCompleted)
                 {
-                    return;
+                    return true;
                 }
 
                 try
@@ -310,15 +312,18 @@ namespace Esk.GearForge.CSUtil
                     if (!RunTask.Wait(MAX_WAIT_TIME_MS))
                     {
                         Debug.WriteLine($"{Name} Task Stop Timed out after {MAX_WAIT_TIME_MS}ms.");
+                        return false;
                     }
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
+                    return false;
                 }
             }
 
             _isStarted = false;
+            return true;
         }
 
         /// <summary>

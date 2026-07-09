@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : ExtensionUtil.cs
 // Project          : CSUtil
-// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
+// Last Update      : 2026.07.09 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -32,7 +32,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="DecoderFallbackException"></exception>
         public static string ConvertToString(this byte[] bytes, bool isRemoveEOF = false)
         {
-            return isRemoveEOF ? Encoding.ASCII.GetString(bytes).Replace("\0", "") : Encoding.ASCII.GetString(bytes);
+            string result = Encoding.ASCII.GetString(bytes);
+            return isRemoveEOF ? result.Replace("\0", "") : result;
         }
 
         /// <summary>
@@ -49,8 +50,7 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="OverflowException"></exception>
         public static int HexToDec(this string str)
         {
-            string hex = $"{str.ToUpperInvariant():X6}";
-            return Convert.ToInt32(hex, 16);
+            return Convert.ToInt32(str, 16);
         }
 
         /// <summary>
@@ -65,26 +65,17 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString<T>(this T[] values, char token)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Length];
-            for (int i = 0; i < values.Length; ++i)
+            if (values.Length == 0)
             {
-                stringArray[i] = values[i] != null ? values[i].ToString() : string.Empty;
-                totalLength += stringArray[i].Length;
+                return string.Empty;
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + values.Length);
-            for (int i = 0; i < values.Length; ++i)
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(values[0] != null ? values[0].ToString() : string.Empty);
+            for (int i = 1; i < values.Length; ++i)
             {
-                stringBuilder.Append(stringArray[i]);
                 stringBuilder.Append(token);
+                stringBuilder.Append(values[i] != null ? values[i].ToString() : string.Empty);
             }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
             return stringBuilder.ToString();
         }
 
@@ -99,27 +90,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString(this string[] values, char token)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Length];
-            for (int i = 0; i < values.Length; ++i)
-            {
-                stringArray[i] = string.IsNullOrEmpty(values[i]) ? string.Empty : values[i];
-                totalLength += stringArray[i].Length;
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + values.Length);
-            for (int i = 0; i < values.Length; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Length);
+            return result;
         }
 
         /// <summary>
@@ -134,27 +106,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString<T>(this T[] values, string token)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Length];
-            for (int i = 0; i < values.Length; ++i)
-            {
-                stringArray[i] = values[i] != null ? values[i].ToString() : string.Empty;
-                totalLength += stringArray[i].Length;
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + (values.Length * token.Length));
-            for (int i = 0; i < values.Length; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length >= token.Length)
-            {
-                stringBuilder.Length -= token.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Length);
+            return result;
         }
 
         /// <summary>
@@ -168,27 +121,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString(this string[] values, string token)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Length];
-            for (int i = 0; i < values.Length; ++i)
-            {
-                stringArray[i] = string.IsNullOrEmpty(values[i]) ? string.Empty : values[i];
-                totalLength += stringArray[i].Length;
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + (values.Length * token.Length));
-            for (int i = 0; i < values.Length; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length >= token.Length)
-            {
-                stringBuilder.Length -= token.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Length);
+            return result;
         }
 
         /// <summary>
@@ -204,27 +138,18 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString<T>(this T[] values, char token, int count)
         {
-            int totalLength = 0;
             int length = count > values.Length ? values.Length : count;
-            string[] stringArray = new string[length];
-            for (int i = 0; i < length; ++i)
+            if (values.Length == 0)
             {
-                stringArray[i] = values[i] != null ? values[i].ToString() : string.Empty;
-                totalLength += stringArray[i].Length;
+                return string.Empty;
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + count);
-            for (int i = 0; i < length; ++i)
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(values[0] != null ? values[0].ToString() : string.Empty);
+            for (int i = 1; i < length; ++i)
             {
-                stringBuilder.Append(stringArray[i]);
                 stringBuilder.Append(token);
+                stringBuilder.Append(values[i] != null ? values[i].ToString() : string.Empty);
             }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
             return stringBuilder.ToString();
         }
 
@@ -240,27 +165,18 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString(this string[] values, char token, int count)
         {
-            int totalLength = 0;
             int length = count > values.Length ? values.Length : count;
-            string[] stringArray = new string[length];
-            for (int i = 0; i < length; ++i)
+            if (values.Length == 0)
             {
-                stringArray[i] = string.IsNullOrEmpty(values[i]) ? string.Empty : values[i];
-                totalLength += stringArray[i].Length;
+                return string.Empty;
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + count);
-            for (int i = 0; i < length; ++i)
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(values[0] ?? string.Empty);
+            for (int i = 1; i < length; ++i)
             {
-                stringBuilder.Append(stringArray[i]);
                 stringBuilder.Append(token);
+                stringBuilder.Append(values[i] ?? string.Empty);
             }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
             return stringBuilder.ToString();
         }
 
@@ -277,27 +193,18 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString<T>(this T[] values, string token, int count)
         {
-            int totalLength = 0;
             int length = count > values.Length ? values.Length : count;
-            string[] stringArray = new string[length];
-            for (int i = 0; i < length; ++i)
+            if (values.Length == 0)
             {
-                stringArray[i] = values[i] != null ? values[i].ToString() : string.Empty;
-                totalLength += stringArray[i].Length;
+                return string.Empty;
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + (token.Length * count));
-            for (int i = 0; i < length; ++i)
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(values[0] != null ? values[0].ToString() : string.Empty);
+            for (int i = 1; i < length; ++i)
             {
-                stringBuilder.Append(stringArray[i]);
                 stringBuilder.Append(token);
+                stringBuilder.Append(values[i] != null ? values[i].ToString() : string.Empty);
             }
-            if (stringBuilder.Length >= token.Length)
-            {
-                stringBuilder.Length -= token.Length;
-            }
-
             return stringBuilder.ToString();
         }
 
@@ -313,27 +220,18 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString(this string[] values, string token, int count)
         {
-            int totalLength = 0;
             int length = count > values.Length ? values.Length : count;
-            string[] stringArray = new string[length];
-            for (int i = 0; i < length; ++i)
+            if (values.Length == 0)
             {
-                stringArray[i] = string.IsNullOrEmpty(values[i]) ? string.Empty : values[i];
-                totalLength += stringArray[i].Length;
+                return string.Empty;
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + (token.Length * length));
-            for (int i = 0; i < length; ++i)
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(values[0] ?? string.Empty);
+            for (int i = 1; i < length; ++i)
             {
-                stringBuilder.Append(stringArray[i]);
                 stringBuilder.Append(token);
+                stringBuilder.Append(values[i] ?? string.Empty);
             }
-            if (stringBuilder.Length >= token.Length)
-            {
-                stringBuilder.Length -= token.Length;
-            }
-
             return stringBuilder.ToString();
         }
 
@@ -349,29 +247,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString<T>(this ICollection<T> values, char token)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Count];
-            int index = 0;
-            foreach (T item in values)
-            {
-                stringArray[index] = item != null ? item.ToString() : string.Empty;
-                totalLength += stringArray[index].Length;
-                ++index;
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + values.Count);
-            for (int i = 0; i < values.Count; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Count);
+            return result;
         }
 
         /// <summary>
@@ -386,29 +263,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString(this ICollection<string> values, char token)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Count];
-            int index = 0;
-            foreach (string item in values)
-            {
-                stringArray[index] = string.IsNullOrEmpty(item) ? string.Empty : item;
-                totalLength += stringArray[index].Length;
-                ++index;
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + values.Count);
-            for (int i = 0; i < values.Count; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Count);
+            return result;
         }
 
         /// <summary>
@@ -423,29 +279,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString<T>(this ICollection<T> values, string token)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Count];
-            int index = 0;
-            foreach (T item in values)
-            {
-                stringArray[index] = item != null ? item.ToString() : string.Empty;
-                totalLength += stringArray[index].Length;
-                ++index;
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + (values.Count * token.Length));
-            for (int i = 0; i < values.Count; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length >= token.Length)
-            {
-                stringBuilder.Length -= token.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Count);
+            return result;
         }
 
         /// <summary>
@@ -459,29 +294,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString(this ICollection<string> values, string token)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Count];
-            int index = 0;
-            foreach (string item in values)
-            {
-                stringArray[index] = string.IsNullOrEmpty(item) ? string.Empty : item;
-                totalLength += stringArray[index].Length;
-                ++index;
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + (values.Count * token.Length));
-            for (int i = 0; i < values.Count; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length >= token.Length)
-            {
-                stringBuilder.Length -= token.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Count);
+            return result;
         }
 
         /// <summary>
@@ -497,33 +311,30 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString<T>(this ICollection<T> values, char token, int count)
         {
-            int totalLength = 0;
             int length = count > values.Count ? values.Count : count;
-            string[] stringArray = new string[length];
-            int index = 0;
-            foreach (T item in values)
+            if (length == 0)
             {
-                stringArray[index] = item != null ? item.ToString() : string.Empty;
-                totalLength += stringArray[index].Length;
-                ++index;
-                if (index >= length)
-                {
-                    break;
-                }
+                return string.Empty;
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + length);
-            for (int i = 0; i < length; ++i)
+            StringBuilder stringBuilder = new StringBuilder();
+            int index = 0;
+            using (IEnumerator<T> enumerator = values.GetEnumerator())
             {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
+                while (enumerator.MoveNext())
+                {
+                    if (index >= length)
+                    {
+                        break;
+                    }
+                    stringBuilder.Append(enumerator.Current != null ? enumerator.Current.ToString() : string.Empty);
+                    stringBuilder.Append(token);
+                    ++index;
+                }
             }
             if (stringBuilder.Length > 0)
             {
                 --stringBuilder.Length;
             }
-
             return stringBuilder.ToString();
         }
 
@@ -539,33 +350,30 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString(this ICollection<string> values, char token, int count)
         {
-            int totalLength = 0;
             int length = count > values.Count ? values.Count : count;
-            string[] stringArray = new string[length];
-            int index = 0;
-            foreach (string item in values)
+            if (length == 0)
             {
-                stringArray[index] = string.IsNullOrEmpty(item) ? string.Empty : item;
-                totalLength += stringArray[index].Length;
-                ++index;
-                if (index >= length)
-                {
-                    break;
-                }
+                return string.Empty;
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + length);
-            for (int i = 0; i < length; ++i)
+            StringBuilder stringBuilder = new StringBuilder();
+            using (IEnumerator<string> enumerator = values.GetEnumerator())
             {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
+                int index = 0;
+                while (enumerator.MoveNext())
+                {
+                    if (index >= length)
+                    {
+                        break;
+                    }
+                    stringBuilder.Append(enumerator.Current ?? string.Empty);
+                    stringBuilder.Append(token);
+                    ++index;
+                }
             }
             if (stringBuilder.Length > 0)
             {
                 --stringBuilder.Length;
             }
-
             return stringBuilder.ToString();
         }
 
@@ -582,33 +390,30 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString<T>(this ICollection<T> values, string token, int count)
         {
-            int totalLength = 0;
             int length = count > values.Count ? values.Count : count;
-            string[] stringArray = new string[length];
-            int index = 0;
-            foreach (T item in values)
+            if (length == 0)
             {
-                stringArray[index] = item != null ? item.ToString() : string.Empty;
-                totalLength += stringArray[index].Length;
-                ++index;
-                if (index >= length)
+                return string.Empty;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            using (IEnumerator<T> enumerator = values.GetEnumerator())
+            {
+                int index = 0;
+                while (enumerator.MoveNext())
                 {
-                    break;
+                    if (index >= length)
+                    {
+                        break;
+                    }
+                    stringBuilder.Append(enumerator.Current != null ? enumerator.Current.ToString() : string.Empty);
+                    stringBuilder.Append(token);
+                    ++index;
                 }
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + (length * token.Length));
-            for (int i = 0; i < length; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length >= token.Length)
+            if (stringBuilder.Length > token.Length)
             {
                 stringBuilder.Length -= token.Length;
             }
-
             return stringBuilder.ToString();
         }
 
@@ -624,33 +429,30 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString(this ICollection<string> values, string token, int count)
         {
-            int totalLength = 0;
             int length = count > values.Count ? values.Count : count;
-            string[] stringArray = new string[length];
-            int index = 0;
-            foreach (string item in values)
+            if (length == 0)
             {
-                stringArray[index] = string.IsNullOrEmpty(item) ? string.Empty : item;
-                totalLength += stringArray[index].Length;
-                ++index;
-                if (index >= length)
+                return string.Empty;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            using (IEnumerator<string> enumerator = values.GetEnumerator())
+            {
+                int index = 0;
+                while (enumerator.MoveNext())
                 {
-                    break;
+                    if (index >= length)
+                    {
+                        break;
+                    }
+                    stringBuilder.Append(enumerator.Current ?? string.Empty);
+                    stringBuilder.Append(token);
+                    ++index;
                 }
             }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + (length * token.Length));
-            for (int i = 0; i < length; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length >= token.Length)
+            if (stringBuilder.Length > token.Length)
             {
                 stringBuilder.Length -= token.Length;
             }
-
             return stringBuilder.ToString();
         }
 
@@ -666,38 +468,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static string OneLineString(this byte[] values, char token, bool isHex = false)
         {
-            int totalLength = 0;
-            string[] stringArray = new string[values.Length];
-            if (isHex)
-            {
-                for (int i = 0; i < values.Length; ++i)
-                {
-                    stringArray[i] = values[i].ToStringInvariantCulture("X");
-                    totalLength += stringArray[i].Length;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < values.Length; ++i)
-                {
-                    stringArray[i] = values[i].ToStringInvariantCulture();
-                    totalLength += stringArray[i].Length;
-                }
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + values.Length);
-            for (int i = 0; i < values.Length; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Length, isHex);
+            return result;
         }
 
         /// <summary>
@@ -712,38 +484,18 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static string OneLineString(this byte[] values, char token, int count, bool isHex = false)
         {
-            int totalLength = 0;
             int length = count > values.Length ? values.Length : count;
-            string[] stringArray = new string[length];
-            if (isHex)
+            if (length == 0)
             {
-                for (int i = 0; i < length; ++i)
-                {
-                    stringArray[i] = values[i].ToStringInvariantCulture("X");
-                    totalLength += stringArray[i].Length;
-                }
+                return string.Empty;
             }
-            else
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(isHex ? values[0].ToStringInvariantCulture("X") : values[0].ToStringInvariantCulture());
+            for (int i = 1; i < length; ++i)
             {
-                for (int i = 0; i < length; ++i)
-                {
-                    stringArray[i] = values[i].ToStringInvariantCulture();
-                    totalLength += stringArray[i].Length;
-                }
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + length);
-            for (int i = 0; i < length; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
                 stringBuilder.Append(token);
+                stringBuilder.Append(isHex ? values[i].ToStringInvariantCulture("X") : values[i].ToStringInvariantCulture());
             }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
             return stringBuilder.ToString();
         }
 
@@ -758,41 +510,8 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static string OneLineString(this ICollection<byte> values, char token, bool isHex = false)
         {
-            int totalLength = 0;
-            int index = 0;
-            string[] stringArray = new string[values.Count];
-            if (isHex)
-            {
-                foreach (byte item in values)
-                {
-                    stringArray[index] = item.ToStringInvariantCulture("X");
-                    totalLength += stringArray[index].Length;
-                    ++index;
-                }
-            }
-            else
-            {
-                foreach (byte item in values)
-                {
-                    stringArray[index] = item.ToStringInvariantCulture();
-                    totalLength += stringArray[index].Length;
-                    ++index;
-                }
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + values.Count);
-            for (int i = 0; i < values.Count; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
-            }
-            if (stringBuilder.Length > 0)
-            {
-                --stringBuilder.Length;
-            }
-
-            return stringBuilder.ToString();
+            string result = OneLineString(values, token, values.Count, isHex);
+            return result;
         }
 
         /// <summary>
@@ -807,49 +526,30 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static string OneLineString(this ICollection<byte> values, char token, int count, bool isHex = false)
         {
-            int totalLength = 0;
-            int index = 0;
             int length = count > values.Count ? values.Count : count;
-            string[] stringArray = new string[length];
-            if (isHex)
+            if (length == 0)
             {
-                foreach (byte item in values)
+                return string.Empty;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            using (IEnumerator<byte> enumerator = values.GetEnumerator())
+            {
+                int index = 0;
+                while (enumerator.MoveNext())
                 {
-                    stringArray[index] = item.ToStringInvariantCulture("X");
-                    totalLength += stringArray[index].Length;
-                    ++index;
                     if (index >= length)
                     {
                         break;
                     }
-                }
-            }
-            else
-            {
-                foreach (byte item in values)
-                {
-                    stringArray[index] = item.ToStringInvariantCulture();
-                    totalLength += stringArray[index].Length;
+                    stringBuilder.Append(isHex ? enumerator.Current.ToStringInvariantCulture("X") : enumerator.Current.ToStringInvariantCulture());
+                    stringBuilder.Append(token);
                     ++index;
-                    if (index >= length)
-                    {
-                        break;
-                    }
                 }
-            }
-
-            // 전체 문자열 길이 + token 길이
-            StringBuilder stringBuilder = new StringBuilder(totalLength + length);
-            for (int i = 0; i < length; ++i)
-            {
-                stringBuilder.Append(stringArray[i]);
-                stringBuilder.Append(token);
             }
             if (stringBuilder.Length > 0)
             {
                 --stringBuilder.Length;
             }
-
             return stringBuilder.ToString();
         }
 
@@ -863,9 +563,8 @@ namespace Esk.GearForge.CSUtil
         /// <returns>한 줄로 만들어진 문자열</returns>
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString2<T>(this T[] values, char token)
-        {
-            string result = string.Join(token.ToString(), values);
-            return result;
+        { 
+            return string.Join(token.ToString(), values);
         }
 
         /// <summary>
@@ -879,8 +578,7 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static string OneLineString2<T>(this T[] values, string token)
         {
-            string result = string.Join(token, values);
-            return result;
+            return string.Join(token, values);
         }
 
         /// <summary>
@@ -1020,7 +718,7 @@ namespace Esk.GearForge.CSUtil
             try
             {
                 ptr = Marshal.AllocHGlobal(size);
-                Marshal.StructureToPtr(obj, ptr, true);
+                Marshal.StructureToPtr(obj, ptr, false);
                 Marshal.Copy(ptr, arr, 0, size);
             }
             catch (Exception ex)

@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : FileUtil.cs
 // Project          : CSUtil
-// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
+// Last Update      : 2026.07.27 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -85,7 +85,7 @@ namespace Esk.GearForge.CSUtil
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:FileRename] Exception: {ex}");
+                Debug.WriteLine($"[FileUtil:FileRename] Exception: {ex}");
             }
 
             return result;
@@ -108,12 +108,12 @@ namespace Esk.GearForge.CSUtil
 
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:ReadFile] Failed: {nameof(filePath)} is null or empty.");
+                Debug.WriteLine($"[FileUtil:ReadFile] Failed: {nameof(filePath)} is null or empty.");
                 return false;
             }
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:ReadFile] Failed: {nameof(filePath)}({filePath}) is not exist.");
+                Debug.WriteLine($"[FileUtil:ReadFile] Failed: {nameof(filePath)}({filePath}) is not exist.");
                 return false;
             }
             if (encoding == null)
@@ -128,7 +128,9 @@ namespace Esk.GearForge.CSUtil
                 {
                     case ReadTypes.ReadToEnd:
                         {
-                            using (StreamReader streamReader = new StreamReader(filePath, encoding))
+                            // 다른 프로세스가 접근 중이어도 읽기 동작 가능하도록 수정
+                            using (FileStream fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
+                            using (StreamReader streamReader = new StreamReader(fileStream, encoding))
                             {
                                 readData = streamReader.ReadToEnd();
                             }
@@ -144,7 +146,9 @@ namespace Esk.GearForge.CSUtil
                     case ReadTypes.ReadLines:
                         {
                             StringBuilder stringBuilder = new StringBuilder(128);
-                            using (StreamReader streamReader = new StreamReader(filePath, encoding))
+                            // 다른 프로세스가 접근 중이어도 읽기 동작 가능하도록 수정
+                            using (FileStream fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
+                            using (StreamReader streamReader = new StreamReader(fileStream, encoding))
                             {
                                 string line = string.Empty;
                                 while ((line = streamReader.ReadLine()) != null)
@@ -162,14 +166,15 @@ namespace Esk.GearForge.CSUtil
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:ReadFile] Exception: {ex}");
+                Debug.WriteLine($"[FileUtil:ReadFile] Exception: {ex}");
+                readData = string.Empty;
             }
 
             return result;
         }
 
         /// <summary>
-        /// 파일에 데이터(string)를 쓰는 함수
+        /// 파일에 데이터(string)를 쓰는 함수 (모든 내용을 덮어씀)
         /// </summary>
         /// <param name="filePath">쓸 파일의 이름(전체 경로)</param>
         /// <param name="writeData">쓸 데이터(string)</param>
@@ -183,7 +188,7 @@ namespace Esk.GearForge.CSUtil
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:WriteFile] Failed: {nameof(filePath)} is null or empty.");
+                Debug.WriteLine($"[FileUtil:WriteFile] Failed: {nameof(filePath)} is null or empty.");
                 return false;
             }
             if (encoding == null)
@@ -198,7 +203,9 @@ namespace Esk.GearForge.CSUtil
                 {
                     case WriteTypes.Write:
                         {
-                            using (StreamWriter streamWriter = new StreamWriter(filePath, false, encoding))
+                            // 다른 프로세스가 접근 중이어도 쓰기 동작 가능하도록 수정
+                            using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                            using (StreamWriter streamWriter = new StreamWriter(fileStream, encoding))
                             {
                                 streamWriter.Write(writeData);
                             }
@@ -217,7 +224,7 @@ namespace Esk.GearForge.CSUtil
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:WriteFile] Exception: {ex}");
+                Debug.WriteLine($"[FileUtil:WriteFile] Exception: {ex}");
             }
 
             return result;
@@ -235,12 +242,12 @@ namespace Esk.GearForge.CSUtil
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:IsFileOpen] Failed: {nameof(filePath)} is null or empty.");
+                Debug.WriteLine($"[FileUtil:IsFileOpen] Failed: {nameof(filePath)} is null or empty.");
                 return false;
             }
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:IsFileOpen] Failed: {nameof(filePath)}({filePath}) is not exist.");
+                Debug.WriteLine($"[FileUtil:IsFileOpen] Failed: {nameof(filePath)}({filePath}) is not exist.");
                 return false;
             }
 
@@ -291,17 +298,20 @@ namespace Esk.GearForge.CSUtil
         /// </summary>
         /// <param name="filePath">파일의 경로 (전체 경로)</param>
         /// <param name="isIncludeBuildDate">파일 빌드 날짜 포함 유무</param>
-        /// <returns>파일버전 또는 파일버전 build yyyy-MM-dd HH:mm:ss.fff</returns>
+        /// <returns>
+        /// <paramref name="isIncludeBuildDate"/>이 false인 경우: 파일버전 <br/>
+        /// <paramref name="isIncludeBuildDate"/>이 true인 경우: 파일버전 build (x64 or x86) yyyy-MM-dd HH:mm:ss.fff <br/>
+        /// </returns>
         public static string GetFileVersion(string filePath, bool isIncludeBuildDate = true)
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:GetFileVersion] Failed: {nameof(filePath)} is null or empty.");
+                Debug.WriteLine($"[FileUtil:GetFileVersion] Failed: {nameof(filePath)} is null or empty.");
                 return string.Empty;
             }
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:GetFileVersion] Failed: {nameof(filePath)}({filePath}) is not exist.");
+                Debug.WriteLine($"[FileUtil:GetFileVersion] Failed: {nameof(filePath)}({filePath}) is not exist.");
                 return string.Empty;
             }
 
@@ -317,7 +327,10 @@ namespace Esk.GearForge.CSUtil
         /// 현재 실행 파일의 Version 정보를 받아오는 함수 <br/>
         /// </summary>
         /// <param name="isIncludeBuildDate">파일 빌드 날짜 포함 유무</param>
-        /// <returns>파일버전 또는 파일버전 build yyyy-MM-dd HH:mm:ss.fff</returns>
+        /// <returns>
+        /// <paramref name="isIncludeBuildDate"/>이 false인 경우: 파일버전 <br/>
+        /// <paramref name="isIncludeBuildDate"/>이 true인 경우: 파일버전 build (x64 or x86) yyyy-MM-dd HH:mm:ss.fff <br/>
+        /// </returns>
         public static string GetFileVersion(bool isIncludeBuildDate = true)
         {
             Assembly assembly = Assembly.GetEntryAssembly();
@@ -337,6 +350,67 @@ namespace Esk.GearForge.CSUtil
         }
 
         /// <summary>
+        /// 파일의 이름과 Version 정보를 받아오는 함수 <br/>
+        /// </summary>
+        /// <param name="filePath">파일의 경로 (전체 경로)</param>
+        /// <param name="isIncludeBuildDate">파일 빌드 날짜 포함 유무</param>
+        /// <returns>
+        /// <paramref name="isIncludeBuildDate"/>이 false인 경우: 파일명 (파일버전) <br/>
+        /// <paramref name="isIncludeBuildDate"/>이 true인 경우: 파일명 (파일버전 build (x64 or x86) yyyy-MM-dd HH:mm:ss.fff) <br/>
+        /// </returns>
+        public static string GetFileNameWithVersion(string filePath, bool isIncludeBuildDate = true)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                Debug.WriteLine($"[FileUtil:GetFileNameWithVersion] Failed: {nameof(filePath)} is null or empty.");
+                return string.Empty;
+            }
+            if (!File.Exists(filePath))
+            {
+                Debug.WriteLine($"[FileUtil:GetFileNameWithVersion] Failed: {nameof(filePath)}({filePath}) is not exist.");
+                return string.Empty;
+            }
+
+            AssemblyName assemblyName = AssemblyName.GetAssemblyName(filePath);
+            if (isIncludeBuildDate)
+            {
+                DateTime lastWriteTime = File.GetLastWriteTime(filePath);
+                string env = IntPtr.Size == 8 ? "x64" : "x86";
+                return $"{assemblyName.Name} ({assemblyName.Version} build ({env}) {lastWriteTime:yyyy-MM-dd HH:mm:ss.fff})";
+            }
+            else
+            {
+                return $"{assemblyName.Name} ({assemblyName.Version})";
+            }
+        }
+
+        /// <summary>
+        /// 현재 실행 파일의 이름과 Version 정보를 받아오는 함수 <br/>
+        /// </summary>
+        /// <param name="isIncludeBuildDate">파일 빌드 날짜 포함 유무</param>
+        /// <returns>
+        /// <paramref name="isIncludeBuildDate"/>이 false인 경우: 파일명 (파일버전) <br/>
+        /// <paramref name="isIncludeBuildDate"/>이 true인 경우: 파일명 (파일버전 build (x64 or x86) yyyy-MM-dd HH:mm:ss.fff) <br/>
+        /// </returns>
+        public static string GetFileNameWithVersion(bool isIncludeBuildDate = true)
+        {
+            Assembly assembly = Assembly.GetEntryAssembly();
+            string exePath = assembly.Location;
+            AssemblyProductAttribute fileNameAttribute = (AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute));
+            AssemblyFileVersionAttribute fileVersionAttribute = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
+            if (isIncludeBuildDate)
+            {
+                DateTime lastWriteTime = File.GetLastWriteTime(exePath);
+                string env = IntPtr.Size == 8 ? "x64" : "x86";
+                return $"{fileNameAttribute.Product} ({fileVersionAttribute.Version} build ({env}) {lastWriteTime:yyyy-MM-dd HH:mm:ss.fff})";
+            }
+            else
+            {
+                return $"{fileNameAttribute.Product} ({fileVersionAttribute.Version})";
+            }
+        }
+
+        /// <summary>
         /// 파일의 내용을 변경하는 함수
         /// </summary>
         /// <param name="filePath">변경할 파일의 전체경로</param>
@@ -350,12 +424,12 @@ namespace Esk.GearForge.CSUtil
         {
             if (string.IsNullOrEmpty(prevContext))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:ChangeContext] Failed: {nameof(prevContext)} is null or empty.");
+                Debug.WriteLine($"[FileUtil:ChangeContext] Failed: {nameof(prevContext)} is null or empty.");
                 return false;
             }
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:ChangeContext] Failed: {nameof(filePath)}({filePath}) is not exist.");
+                Debug.WriteLine($"[FileUtil:ChangeContext] Failed: {nameof(filePath)}({filePath}) is not exist.");
                 return false;
             }
 
@@ -382,7 +456,7 @@ namespace Esk.GearForge.CSUtil
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:ChangeContext] Exception: {ex}");
+                Debug.WriteLine($"[FileUtil:ChangeContext] Exception: {ex}");
                 isComplete = false;
             }
 
@@ -407,10 +481,80 @@ namespace Esk.GearForge.CSUtil
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[Common.Util.FileUtil:CopyFile] Exception: {ex}");
+                Debug.WriteLine($"[FileUtil:CopyFile] Exception: {ex}");
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// 특정 디렉토리에 있는 모든 파일을 삭제하는 함수 <br/>
+        /// </summary>
+        /// <param name="directoryPath">파일을 삭제하려는 디렉터리의 전체 경로</param>
+        /// <returns></returns>
+        /// <remarks>[NEW][2026.03.30 - yc.jeon]</remarks>
+        public static bool DeleteFilesInDirectory(string directoryPath)
+        {
+            if (string.IsNullOrWhiteSpace(directoryPath))
+            {
+                Debug.WriteLine($"[FileUtil:DeleteFilesInDirectory] Failed: {nameof(directoryPath)} is null or empty.");
+                return false;
+            }
+            if (!Directory.Exists(directoryPath))
+            {
+                Debug.WriteLine($"[FileUtil:DeleteFilesInDirectory] Failed: {nameof(directoryPath)}({directoryPath}) is not exist.");
+                return false;
+            }
+            try
+            {
+                string[] files = Directory.GetFiles(directoryPath);
+                foreach (string file in files)
+                {
+                    File.Delete(file);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[FileUtil:DeleteFilesInDirectory] Exception: {ex}");
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 파일 경로인지 확인하는 함수
+        /// </summary>
+        /// <param name="path">확인할 파일 경로</param>
+        /// <param name="useFileExists">파일 존재 여부를 확인할지 여부</param>
+        /// <returns>
+        /// true: 파일 경로임 <br/>
+        /// false: 파일 경로가 아님 (파일이 존재하는지 여부는 useFileExists 값에 따라 다름) <br/>
+        /// </returns>
+        /// <remarks>[NEW][2026.05.09 - yc.jeon]</remarks>
+        public static bool IsFilePath(string path, bool useFileExists)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                Debug.WriteLine($"[FileUtil:IsFilePath] Failed: {nameof(path)} is null or empty.");
+                return false;
+            }
+            bool isFilePath;
+            try
+            {
+                bool isPath = (path.Length >= 3 && char.IsLetter(path[0]) && path[1] == ':' && path[2] == '\\')
+                    || path.StartsWithOrdinal(@"\\");
+                if (useFileExists)
+                {
+                    isPath = isPath && File.Exists(path);
+                }
+                isFilePath = isPath;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[FileUtil:IsFilePath] Exception: {ex}");
+                return false;
+            }
+            return isFilePath;
         }
     }
 }

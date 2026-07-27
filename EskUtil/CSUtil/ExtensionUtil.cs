@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : ExtensionUtil.cs
 // Project          : CSUtil
-// Last Update      : 2026.07.09 - yc.jeon (Eskeptor)
+// Last Update      : 2026.07.27 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -639,27 +639,36 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentNullException"></exception>
         public static int FindName(this Type[] types, string name, string priorityString = "")
         {
-            List<Tuple<int, string>> finds = new List<Tuple<int, string>>();
-
-            for (int i = 0; i < types.Length; ++i)
+            bool usePriority = !string.IsNullOrWhiteSpace(priorityString);
+            if (usePriority)
             {
-                if (types[i].Name.EqualsOrdinal(name))
+                List<Tuple<int, string>> finds = new List<Tuple<int, string>>(types.Length);
+                for (int i = 0; i < types.Length; ++i)
                 {
-                    if (string.IsNullOrWhiteSpace(priorityString))
+                    if (types[i].Name.EqualsOrdinal(name))
                     {
-                        return i;
+                        finds.Add(new Tuple<int, string>(i, types[i].FullName));
                     }
-                    finds.Add(new Tuple<int, string>(i, types[i].FullName));
+                }
+
+                if (finds.Count > 0)
+                {
+                    for (int i = 0; i < finds.Count; ++i)
+                    {
+                        if (finds[i].Item2.Contains(priorityString))
+                        {
+                            return finds[i].Item1;
+                        }
+                    }
                 }
             }
-
-            if (finds.Count > 0)
+            else
             {
-                for (int i = 0; i < finds.Count; ++i)
+                for (int i = 0; i < types.Length; ++i)
                 {
-                    if (finds[i].Item2.Contains(priorityString))
+                    if (types[i].Name.EqualsOrdinal(name))
                     {
-                        return finds[i].Item1;
+                        return i;
                     }
                 }
             }
@@ -668,7 +677,7 @@ namespace Esk.GearForge.CSUtil
         }
 
         /// <summary>
-        /// <paramref name="text"/>이 배열을 나타내는 문자열일때 해당 배열의 크기 또는 인덱스를 반환하는 함수 <br/><br/>
+        /// <paramref name="text"/>이 배열을 나타내는 문자열일때 해당 배열의 인덱스를 반환하는 함수 <br/>
         /// 예1) TestData[55] -> 55 반환 <br/>
         /// 예2) TestData -> -1 반환 <br/>
         /// 예3) TestData[] -> -1 반환
@@ -676,10 +685,10 @@ namespace Esk.GearForge.CSUtil
         /// <param name="text">문자열</param>
         /// <returns>
         /// -1: 배열을 나타내는 문자열이 아님 <br/>
-        /// 0~: 배열의 크기 또는 인덱스
+        /// 0~: 배열의 인덱스
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static int GetArrayNumber(this string text)
+        public static int GetArrayIndex(this string text)
         {
             int arrayBracketIdx = text.IndexOf('[');
             int arrayBracketEndIdx = text.IndexOf(']');
@@ -691,12 +700,12 @@ namespace Esk.GearForge.CSUtil
             }
 
             string index = text.Substring(arrayBracketIdx + 1, arrayBracketEndIdx - arrayBracketIdx - 1);
-            if (!int.TryParse(index, out int arraySize))
+            if (!int.TryParse(index, out int arrayIndex))
             {
                 return -1;
             }
 
-            return arraySize;
+            return arrayIndex;
         }
 
         /// <summary>
@@ -710,7 +719,7 @@ namespace Esk.GearForge.CSUtil
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="MissingMethodException"></exception>
-        public static byte[] ToByteDatas(this object obj)
+        public static byte[] ToByteDatas<T>(this T obj) where T : struct
         {
             int size = Marshal.SizeOf(obj);
             byte[] arr = new byte[size];
@@ -718,7 +727,7 @@ namespace Esk.GearForge.CSUtil
             try
             {
                 ptr = Marshal.AllocHGlobal(size);
-                Marshal.StructureToPtr(obj, ptr, false);
+                Marshal.StructureToPtr(obj, ptr, true);
                 Marshal.Copy(ptr, arr, 0, size);
             }
             catch (Exception ex)
@@ -728,7 +737,10 @@ namespace Esk.GearForge.CSUtil
             }
             finally
             {
-                Marshal.FreeHGlobal(ptr);
+                if (ptr != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(ptr);
+                }
             }
 
             return arr;
@@ -767,7 +779,10 @@ namespace Esk.GearForge.CSUtil
             }
             finally
             {
-                Marshal.FreeHGlobal(ptr);
+                if (ptr != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(ptr);
+                }
             }
 
             return obj;
@@ -1800,6 +1815,72 @@ namespace Esk.GearForge.CSUtil
         public static string ToExponential(this double value)
         {
             return ToExponential(value.ToStringInvariantCulture());
+        }
+
+        /// <summary>
+        /// 실수값의 소수점을 지정한 자리수로 자르는 함수 <br/>
+        /// </summary>
+        /// <param name="value">원본값</param>
+        /// <param name="decimalPlace">지정 자리수</param>
+        /// <returns></returns>
+        public static double DecimalPlace(this double value, int decimalPlace)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+            double multiplier = Math.Pow(10, decimalPlace);
+            double result = (double)(long)(value * multiplier) / multiplier;
+            return result;
+        }
+
+        /// <summary>
+        /// 실수값의 소수점을 지정한 자리수로 자르는 함수 <br/>
+        /// </summary>
+        /// <param name="value">원본값</param>
+        /// <param name="multiplier">소수점 자리수에 따른 곱셈 값 (예: 소수점 2자리이면 100, 3자리이면 1000)</param>
+        /// <returns></returns>
+        public static double DecimalPlace(this double value, double multiplier)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+            double result = (double)(long)(value * multiplier) / multiplier;
+            return result;
+        }
+
+        /// <summary>
+        /// 실수값의 소수점을 지정한 자리수로 자르는 함수 <br/>
+        /// </summary>
+        /// <param name="value">원본값</param>
+        /// <param name="decimalPlace">지정 자리수</param>
+        /// <returns></returns>
+        public static float DecimalPlace(this float value, int decimalPlace)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+            float multiplier = (float)Math.Pow(10, decimalPlace);
+            float result = (float)(long)(value * multiplier) / multiplier;
+            return result;
+        }
+
+        /// <summary>
+        /// 실수값의 소수점을 지정한 자리수로 자르는 함수 <br/>
+        /// </summary>
+        /// <param name="value">원본값</param>
+        /// <param name="multiplier">소수점 자리수에 따른 곱셈 값 (예: 소수점 2자리이면 100, 3자리이면 1000)</param>
+        /// <returns></returns>
+        public static float DecimalPlace(this float value, float multiplier)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+            float result = (float)(long)(value * multiplier) / multiplier;
+            return result;
         }
     }
 }

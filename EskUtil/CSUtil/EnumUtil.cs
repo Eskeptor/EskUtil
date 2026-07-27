@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : EnumUtil.cs
 // Project          : CSUtil
-// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
+// Last Update      : 2026.07.27 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -98,9 +98,6 @@ namespace Esk.GearForge.CSUtil
         /// <summary>
         /// Enum 값을 Int 값으로 변환하는 함수
         /// </summary>
-        /// <remarks>
-        /// [MOD][2025.12.01 - yc.jeon] 입력된 타입에 따른 변환 추가 <br/>
-        /// </remarks>
         public static int EnumToInt<T>(T e) where T : struct, Enum
         {
             switch (Underlying<T>.Kind)
@@ -132,9 +129,6 @@ namespace Esk.GearForge.CSUtil
         /// <typeparam name="T"></typeparam>
         /// <param name="value">변환할 Int</param>
         /// <returns>변환된 Enum 값</returns>
-        /// <remarks>
-        /// [MOD][2025.12.01 - yc.jeon] 입력된 타입에 따른 변환 추가 <br/>
-        /// </remarks>
         public static T IntToEnum<T>(int value) where T : struct, Enum
         {
             switch (Underlying<T>.Kind)
@@ -187,9 +181,6 @@ namespace Esk.GearForge.CSUtil
         /// <typeparam name="T"></typeparam>
         /// <param name="e">변환할 Enum</param>
         /// <returns>변환된 UInt 값</returns>
-        /// <remarks>
-        /// [MOD][2025.12.01 - yc.jeon] 입력된 타입에 따른 변환 추가 <br/>
-        /// </remarks>
         public static uint EnumToUInt<T>(T e) where T : struct, Enum
         {
             switch (Underlying<T>.Kind)
@@ -221,9 +212,6 @@ namespace Esk.GearForge.CSUtil
         /// <typeparam name="T"></typeparam>
         /// <param name="value">변환할 UInt</param>
         /// <returns>변환된 Enum 값</returns>
-        /// <remarks>
-        /// [MOD][2025.12.01 - yc.jeon] 입력된 타입에 따른 변환 추가 <br/>
-        /// </remarks>
         public static T UIntToEnum<T>(uint value) where T : struct, Enum
         {
             switch (Underlying<T>.Kind)
@@ -276,9 +264,6 @@ namespace Esk.GearForge.CSUtil
         /// <typeparam name="T"></typeparam>
         /// <param name="e">변환할 Enum</param>
         /// <returns>변환된 Long 값</returns>
-        /// <remarks>
-        /// [MOD][2025.12.01 - yc.jeon] 입력된 타입에 따른 변환 추가 <br/>
-        /// </remarks>
         public static long EnumToLong<T>(T e) where T : struct, Enum
         {
             switch (Underlying<T>.Kind)
@@ -310,9 +295,6 @@ namespace Esk.GearForge.CSUtil
         /// <typeparam name="T"></typeparam>
         /// <param name="value">변환할 Long</param>
         /// <returns>변환된 Enum 값</returns>
-        /// <remarks>
-        /// [MOD][2025.12.01 - yc.jeon] 입력된 타입에 따른 변환 추가 <br/>
-        /// </remarks>
         public static T LongToEnum<T>(long value) where T : struct, Enum
         {
             switch (Underlying<T>.Kind)
@@ -365,9 +347,6 @@ namespace Esk.GearForge.CSUtil
         /// <typeparam name="T"></typeparam>
         /// <param name="e">변환할 Enum</param>
         /// <returns>변환된 ULong 값</returns>
-        /// <remarks>
-        /// [MOD][2025.12.01 - yc.jeon] 입력된 타입에 따른 변환 추가 <br/>
-        /// </remarks>
         public static ulong EnumToULong<T>(T e) where T : struct, Enum
         {
             switch (Underlying<T>.Kind)
@@ -399,9 +378,6 @@ namespace Esk.GearForge.CSUtil
         /// <typeparam name="T"></typeparam>
         /// <param name="value">변환할 ULong</param>
         /// <returns>변환된 Enum 값</returns>
-        /// <remarks>
-        /// [MOD][2025.12.01 - yc.jeon] 입력된 타입에 따른 변환 추가 <br/>
-        /// </remarks>
         public static T ULongToEnum<T>(ulong value) where T : struct, Enum
         {
             switch (Underlying<T>.Kind)
@@ -458,7 +434,6 @@ namespace Esk.GearForge.CSUtil
         /// true: 변환 성공 <br/>
         /// false: 변환 실패 <br/>
         /// </returns>
-        /// <remarks>[NEW][2026.02.11 - yc.jeon]</remarks>
         public static bool StringToEnum<T>(string value, out T result) where T : struct, Enum
         {
             return Enum.TryParse(value, out result);

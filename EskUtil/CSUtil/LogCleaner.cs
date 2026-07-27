@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : LogCleaner.cs
 // Project          : CSUtil
-// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
+// Last Update      : 2026.07.27 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -29,7 +29,7 @@ namespace Esk.GearForge.CSUtil
         /// <summary>
         /// Log Cleaner의 옵션 데이터
         /// </summary>
-        public LogCleanerOption Option { get { return _option; } }
+        public LogCleanerOption Option { get => _option; }
         private LogCleanerOption _option = new LogCleanerOption();
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Esk.GearForge.CSUtil
         /// <summary>
         /// Cleaner 동작이 시작되었는지 유무
         /// </summary>
-        public bool IsStart { get { return _isStart; } }
+        public bool IsStart { get => _isStart; }
         private bool _isStart;
         /// <summary>
         /// Cleaner 동작 Task
@@ -211,11 +211,16 @@ namespace Esk.GearForge.CSUtil
             List<string> deletedFiles = new List<string>(64);
             TimeSpan maxAge = Option.MaxAge;
             SearchOption searchOption = Option.IncludeSubDirectory ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch = Stopwatch.StartNew();
             int timeDiff;
             while (!taskData.IsCanceled)
             {
-                stopwatch.Restart();
+                timeDiff = Convert.ToInt32(Option.SearchInterval - stopwatch.ElapsedMilliseconds);
+                if (timeDiff > 0)
+                {
+                    Thread.Sleep(100);
+                    continue;
+                }
 
                 foreach (string directory in SearchDirectories)
                 {
@@ -275,9 +280,7 @@ namespace Esk.GearForge.CSUtil
                     }
                     deletedFiles.Clear();
                 }
-
-                timeDiff = Math.Max(1, Convert.ToInt32(Option.SearchInterval - stopwatch.ElapsedMilliseconds));
-                Thread.Sleep(timeDiff);
+                stopwatch.Restart();
             }
 
             if (isAllExtension)
@@ -324,7 +327,7 @@ namespace Esk.GearForge.CSUtil
         /// </summary>
         public int Hour
         {
-            get { return _hour; }
+            get => _hour;
             set
             {
                 if (value >= 24)
@@ -348,7 +351,7 @@ namespace Esk.GearForge.CSUtil
         /// </summary>
         public int Minute
         {
-            get { return _minute; }
+            get => _minute;
             set
             {
                 if (value >= 60)
@@ -376,8 +379,8 @@ namespace Esk.GearForge.CSUtil
         /// </summary>
         public int SearchInterval
         {
-            get { return _searchInterval; }
-            set { _searchInterval = value > 0 ? value : 60000; }
+            get => _searchInterval;
+            set => _searchInterval = value > 0 ? value : 60000;
         }
         private int _searchInterval = 60000;
         /// <summary>
@@ -389,14 +392,14 @@ namespace Esk.GearForge.CSUtil
         /// (FileExtensions에 선언된 파일 확장자가 없으면 전체 파일 확장자를 사용하는 것으로 간주, 폴더 제외)
         /// </summary>
         [XmlIgnore]
-        public bool IsAllExtension { get { return FileExtensions.Count == 0; } }
+        public bool IsAllExtension { get => FileExtensions.Count == 0; }
         /// <summary>
         /// Cleaning 기준 기간 (Day + Hour + Minute)
         /// </summary>
         [XmlIgnore]
         public TimeSpan MaxAge
         {
-            get { return TimeSpan.FromDays(Day) + TimeSpan.FromHours(_hour) + TimeSpan.FromMinutes(_minute); }
+            get => TimeSpan.FromDays(Day) + TimeSpan.FromHours(_hour) + TimeSpan.FromMinutes(_minute);
         }
         /// <summary>
         /// Lock Object
@@ -425,7 +428,7 @@ namespace Esk.GearForge.CSUtil
         /// <param name="extension">Log 파일 확장자</param>
         public void AddExtension(string extension)
         {
-            if (string.IsNullOrEmpty(extension))
+            if (string.IsNullOrWhiteSpace(extension))
             {
                 return;
             }
@@ -479,7 +482,7 @@ namespace Esk.GearForge.CSUtil
         /// <param name="extension">제거할 파일 확장자</param>
         public void RemoveExtension(string extension)
         {
-            if (string.IsNullOrEmpty(extension))
+            if (string.IsNullOrWhiteSpace(extension))
             {
                 return;
             }
@@ -504,7 +507,7 @@ namespace Esk.GearForge.CSUtil
                 for (int i = 0; i < FileExtensions.Count; ++i)
                 {
                     string extension = FileExtensions[i];
-                    if (string.IsNullOrEmpty(extension))
+                    if (string.IsNullOrWhiteSpace(extension))
                     {
                         continue;
                     }
@@ -534,7 +537,7 @@ namespace Esk.GearForge.CSUtil
             }
             for (int i = 0; i < FileExtensions.Count; ++i)
             {
-                if (!FileExtensions[i].Equals(option.FileExtensions[i], StringComparison.Ordinal))
+                if (!FileExtensions[i].EqualsOrdinal(option.FileExtensions[i]))
                 {
                     return false;
                 }

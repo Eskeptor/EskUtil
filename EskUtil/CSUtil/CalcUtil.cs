@@ -1,7 +1,7 @@
 ﻿// ======================================================================================================
 // File Name        : CalcUtil.cs
 // Project          : CSUtil
-// Last Update      : 2026.04.21 - yc.jeon (Eskeptor)
+// Last Update      : 2026.07.27 - yc.jeon (Eskeptor)
 // ======================================================================================================
 
 using System;
@@ -19,8 +19,8 @@ namespace Esk.GearForge.CSUtil
         /// <summary>
         /// Double 값 Equal 비교 (Epsilon 사용)
         /// </summary>
-        /// <param name="d1"></param>
-        /// <param name="d2"></param>
+        /// <param name="d1">비교 데이터</param>
+        /// <param name="d2">비교 데이터</param>
         /// <returns></returns>
         public static bool EpsEquals(this double d1, double d2)
         {
@@ -31,8 +31,8 @@ namespace Esk.GearForge.CSUtil
         /// <summary>
         /// Float 값 Equal 비교 (Epsilon 사용)
         /// </summary>
-        /// <param name="d1"></param>
-        /// <param name="d2"></param>
+        /// <param name="f1">비교 데이터</param>
+        /// <param name="f2">비교 데이터</param>
         /// <returns></returns>
         public static bool EpsEquals(this float f1, float f2)
         {
@@ -657,7 +657,7 @@ namespace Esk.GearForge.CSUtil
             object inputValue,
             double inputStart,
             double inputEnd,
-            double outputStart, 
+            double outputStart,
             double outputEnd)
         {
             switch (inputValue)
@@ -684,11 +684,60 @@ namespace Esk.GearForge.CSUtil
         }
 
         /// <summary>
-        /// 데이터 집단에서 표준편차를 구하는 함수
+        /// 입력 값(inputValue)을 주어진 입력 범위(inputStart, inputEnd)에서 출력 범위(outputStart, outputEnd)로 선형적으로 변환하는 함수입니다. <br/>
+        /// 예를 들어, 입력 값이 0~100 범위에 있고 이를 0~1 범위로 변환하려는 경우 사용할 수 있습니다.
+        /// </summary>
+        /// <param name="inputValue">변환할 입력 값</param>
+        /// <param name="inputStart">입력 값의 시작 범위</param>
+        /// <param name="inputEnd">입력 값의 끝 범위</param>
+        /// <param name="outputStart">출력 값의 시작 범위</param>
+        /// <param name="outputEnd">출력 값의 끝 범위</param>
+        /// <param name="decimalPlaceMultiplier">Decimal Place Multiplier</param>
+        /// <returns>변환된 출력 값</returns>
+        public static object GetLinear(
+            object inputValue,
+            double inputStart,
+            double inputEnd,
+            double outputStart,
+            double outputEnd,
+            double decimalPlaceMultiplier)
+        {
+            switch (inputValue)
+            {
+                case float f:
+                    {
+                        float data = GetLinear(f, inputStart, inputEnd, outputStart, outputEnd);
+                        data = (float)(long)(data * decimalPlaceMultiplier) / (float)decimalPlaceMultiplier;
+                        return data;
+                    }
+                case double d:
+                    {
+                        double data = GetLinear(d, inputStart, inputEnd, outputStart, outputEnd);
+                        data = (double)(long)(data * decimalPlaceMultiplier) / decimalPlaceMultiplier;
+                        return data;
+                    }
+                case short s:
+                    return GetLinear(s, inputStart, inputEnd, outputStart, outputEnd);
+                case ushort us:
+                    return GetLinear(us, inputStart, inputEnd, outputStart, outputEnd);
+                case int i:
+                    return GetLinear(i, inputStart, inputEnd, outputStart, outputEnd);
+                case uint ui:
+                    return GetLinear(ui, inputStart, inputEnd, outputStart, outputEnd);
+                case long l:
+                    return GetLinear(l, inputStart, inputEnd, outputStart, outputEnd);
+                case ulong ul:
+                    return GetLinear(ul, inputStart, inputEnd, outputStart, outputEnd);
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// 데이터 집단에서 표준편차를 구하는 함수 (Welford 알고리즘)
         /// </summary>
         /// <param name="datas">표준편차를 구할 데이터 집단</param>
         /// <returns>표준편차</returns>
-        /// <remarks>[MOD][2026.03.16 - yc.jeon] Welford 알고리즘으로 변경</remarks>
         public static double GetStandardDeviation(IEnumerable<double> datas)
         {
             if (datas == null)
@@ -731,9 +780,6 @@ namespace Esk.GearForge.CSUtil
         /// <param name="startTicks">시작 Ticks</param>
         /// <param name="endTicks">종료 Ticks</param>
         /// <returns>Msec으로 변환된 값</returns>
-        /// <remarks>
-        /// [NEW][2025.12.18 - yc.jeon] <br/>
-        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long CalcElapseMsec(long startTicks, long endTicks)
         {
